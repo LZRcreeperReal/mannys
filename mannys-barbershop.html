@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Manny's Barbershop — East Northport, NY</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --black:#080604;
+  --dark:#0f0c08;
+  --mid:#181310;
+  --panel:#201910;
+  --gold:#c49240;
+  --gold2:#e0b45a;
+  --golddim:#7a5c1e;
+  --cream:#ece3cd;
+  --tan:#bba882;
+  --muted:#7a6a50;
+  --red:#b02a22;
+  --blue:#1a5f8a;
+  --stripe:#f2efea;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--black);
+  color:var(--cream);
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:256px;
+}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--dark)}
+::-webkit-scrollbar-thumb{background:var(--golddim)}
+
+/* ─── BARBER POLE BASE ─────────────────────────── */
+@keyframes spin{from{background-position:0 0}to{background-position:var(--sz) var(--sz)}}
+
+.pole{
+  border-radius:50px;overflow:hidden;position:relative;flex-shrink:0;
+  border:var(--bw,2px) solid rgba(255,255,255,.14);
+}
+.pole::before{
+  content:'';position:absolute;inset:calc(var(--bw,2px)*-1);
+  background:repeating-linear-gradient(-45deg,
+    var(--red) 0,var(--red) calc(var(--seg)*1),
+    var(--stripe) calc(var(--seg)*1),var(--stripe) calc(var(--seg)*1.75),
+    var(--blue) calc(var(--seg)*1.75),var(--blue) calc(var(--seg)*2.75),
+    var(--stripe) calc(var(--seg)*2.75),var(--stripe) calc(var(--seg)*3.5));
+  background-size:var(--sz) var(--sz);
+  animation:spin var(--spd,2s) linear infinite;
+}
+.pole::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(to right,rgba(0,0,0,.4) 0%,rgba(255,255,255,.08) 38%,rgba(255,255,255,.2) 56%,rgba(0,0,0,.38) 100%);
+}
+
+.cap{
+  background:linear-gradient(180deg,#d8d8d8 0%,#888 55%,#bbb 100%);
+  border-radius:3px;box-shadow:0 3px 12px rgba(0,0,0,.55);
+}
+.ball{
+  border-radius:50%;
+  background:radial-gradient(circle at 33% 28%,#eee 0%,#bbb 32%,#777 72%,#333 100%);
+  box-shadow:0 4px 16px rgba(0,0,0,.55);
+}
+
+/* ─── NAV ──────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:800;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2.5rem;height:62px;
+  background:rgba(8,6,4,.93);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(196,146,64,.13);
+  transition:box-shadow .3s;
+}
+nav.stuck{box-shadow:0 2px 28px rgba(0,0,0,.8)}
+
+.nbrand{display:flex;align-items:center;gap:11px;text-decoration:none}
+.nbrand-pole{
+  --seg:5px;--sz:28px;--spd:1.7s;--bw:2px;
+  width:15px;height:40px;
+  box-shadow:0 0 7px rgba(196,146,64,.2);
+}
+.ntext{
+  font-family:Georgia,serif;font-size:1rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--gold);line-height:1.15;
+}
+.ntext small{
+  display:block;font-family:'Helvetica Neue',sans-serif;
+  font-size:.44rem;letter-spacing:.32em;color:var(--muted);font-weight:400;
+}
+
+.nlinks{display:flex;gap:2rem;list-style:none}
+.nlinks a{
+  font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--tan);text-decoration:none;transition:color .2s;
+}
+.nlinks a:hover{color:var(--gold)}
+.ncta{
+  background:var(--gold);color:var(--black) !important;
+  padding:.38rem 1rem;font-weight:700;border-radius:1px;
+  transition:background .2s,transform .15s;
+}
+.ncta:hover{background:var(--gold2) !important;transform:translateY(-1px)}
+
+/* ─── HERO ─────────────────────────────────────── */
+#hero{
+  position:relative;overflow:hidden;
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 5vw 60px;
+}
+.hbg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 65% 50% at 18% 65%,rgba(90,54,6,.65) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 40% at 78% 30%,rgba(25,15,3,.75) 0%,transparent 60%),
+    var(--black);
+  animation:hbreathe 14s ease-in-out infinite alternate;
+}
+@keyframes hbreathe{0%{filter:brightness(1)}100%{filter:brightness(1.1)}}
+.hbg::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(-55deg,transparent,transparent 38px,rgba(196,146,64,.016) 38px,rgba(196,146,64,.016) 39px);
+}
+
+.hero-grid{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr 80px;
+  align-items:center;gap:2.5rem;
+  max-width:1100px;
+}
+
+.heye{
+  font-size:.6rem;letter-spacing:.48em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1.6rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.heye::before{content:'';width:28px;height:1px;background:var(--gold)}
+
+h1.hname{
+  font-family:Georgia,serif;
+  font-size:clamp(3.8rem,10vw,9rem);
+  font-weight:900;line-height:.87;
+  text-transform:uppercase;letter-spacing:-.025em;
+  color:var(--cream);
+}
+h1.hname .g{color:var(--gold);display:block;font-size:clamp(4.2rem,12vw,10.5rem)}
+
+.hline{
+  margin-top:1.8rem;
+  font-size:clamp(.82rem,1.5vw,.98rem);
+  color:var(--tan);line-height:1.75;
+  max-width:400px;
+  padding-left:1rem;
+  border-left:2px solid var(--golddim);
+}
+
+.hbtns{display:flex;gap:.8rem;margin-top:2rem;flex-wrap:wrap}
+
+.btn{
+  display:inline-block;text-decoration:none;
+  font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  padding:.78rem 1.8rem;border-radius:1px;transition:all .2s;
+}
+.btn-y{background:var(--gold);color:var(--black)}
+.btn-y:hover{background:var(--gold2);box-shadow:0 5px 20px rgba(196,146,64,.3);transform:translateY(-2px)}
+.btn-o{background:transparent;color:var(--cream);border:1px solid rgba(236,227,205,.22)}
+.btn-o:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+
+/* hero pole column */
+.hpole-col{
+  display:flex;flex-direction:column;align-items:center;gap:0;
+}
+.hpole{
+  --seg:14px;--sz:72px;--spd:2.1s;--bw:3px;
+  width:52px;height:300px;
+  box-shadow:0 0 45px rgba(176,42,34,.22),0 0 70px rgba(26,95,138,.1),inset 0 0 10px rgba(0,0,0,.5);
+}
+.hpole-cap{width:60px;height:13px;position:relative;left:-4px}
+.hpole-ball{width:34px;height:34px;position:relative;left:-4px}
+
+/* scroll cue — sits BELOW buttons, not overlapping */
+.hscroll{
+  margin-top:2.8rem;
+  display:flex;align-items:center;gap:.7rem;
+  opacity:.38;
+}
+.hscroll span{font-size:.54rem;letter-spacing:.4em;text-transform:uppercase;color:var(--tan)}
+.hscroll-bar{width:28px;height:1px;background:linear-gradient(to right,var(--gold),transparent);animation:sbar 2s ease-in-out infinite}
+@keyframes sbar{0%,100%{opacity:.4;width:28px}50%{opacity:1;width:42px}}
+
+/* ─── TICKER ───────────────────────────────────── */
+.ticker{
+  background:var(--gold);padding:.5rem 0;overflow:hidden;
+  position:relative;z-index:10;
+}
+.tick-inner{
+  display:flex;white-space:nowrap;
+  animation:tick 20s linear infinite;
+}
+.tick-inner span{
+  font-size:.65rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--black);padding:0 2rem;
+}
+.tick-inner span::before{content:'✦';margin-right:2rem;opacity:.45}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─── SHARED ───────────────────────────────────── */
+.w{max-width:1120px;margin:0 auto;padding:0 2rem}
+.lbl{font-size:.56rem;letter-spacing:.48em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.8rem}
+.rule{width:44px;height:2px;background:linear-gradient(to right,var(--gold),var(--golddim));margin:1.3rem 0}
+
+/* ─── ABOUT ─────────────────────────────────────── */
+#about{
+  padding:96px 0;background:var(--dark);
+  border-top:1px solid rgba(196,146,64,.07);
+}
+.about-g{display:grid;grid-template-columns:1fr 260px;gap:5rem;align-items:start}
+
+.atext p{font-size:.95rem;line-height:1.95;color:var(--tan);margin-bottom:1.2rem}
+.atext strong{color:var(--cream)}
+.atext p:last-child{margin-bottom:0}
+.apull{
+  margin:1.8rem 0;padding:1.1rem 1.4rem;
+  border-left:3px solid var(--gold);
+  background:rgba(196,146,64,.04);
+  font-size:1rem;color:var(--cream);line-height:1.65;
+}
+
+.aside{display:flex;flex-direction:column;gap:0;align-items:center}
+.aside-pole{
+  --seg:10px;--sz:52px;--spd:2s;--bw:2px;
+  width:38px;height:200px;
+  box-shadow:0 0 30px rgba(176,42,34,.18),inset 0 0 7px rgba(0,0,0,.5);
+}
+.aside-pcap{width:46px;height:10px;position:relative;left:-4px}
+.aside-pball{width:26px;height:26px;position:relative;left:-4px}
+
+.anums{display:flex;flex-direction:column;gap:1px;margin-top:1.8rem;width:100%}
+.anum{
+  padding:1.3rem 1.2rem;
+  background:rgba(196,146,64,.04);
+  border:1px solid rgba(196,146,64,.1);
+  transition:border-color .25s,background .25s;
+}
+.anum:hover{border-color:rgba(196,146,64,.3);background:rgba(196,146,64,.08)}
+.anum-n{
+  font-family:Georgia,serif;font-size:2.4rem;font-weight:900;
+  color:var(--gold);line-height:1;display:block;margin-bottom:.2rem;
+}
+.anum-l{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+
+/* ─── SERVICES ──────────────────────────────────── */
+#services{
+  padding:96px 0;background:var(--mid);
+  border-top:1px solid rgba(196,146,64,.07);
+}
+.sh{margin-bottom:3rem}
+h2.st{
+  font-family:Georgia,serif;
+  font-size:clamp(2rem,4.5vw,3.2rem);
+  font-weight:900;text-transform:uppercase;line-height:.95;
+  letter-spacing:-.01em;color:var(--cream);margin-top:.3rem;
+}
+h2.st em{font-style:normal;color:var(--gold)}
+
+/* uneven grid — featured card is tall */
+.svcs{
+  display:grid;
+  grid-template-columns:2.2fr 1fr 1fr;
+  gap:1px;
+  background:rgba(196,146,64,.07);
+  border:1px solid rgba(196,146,64,.07);
+}
+.svc{
+  background:var(--mid);padding:2rem 1.8rem;
+  position:relative;overflow:hidden;cursor:default;
+  transition:background .25s;
+}
+.svc::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,transparent,var(--gold),transparent);
+  transform:scaleX(0);transition:transform .35s;
+}
+.svc:hover{background:rgba(196,146,64,.04)}
+.svc:hover::after{transform:scaleX(1)}
+.svc-feat{grid-row:span 2;border-right:1px solid rgba(196,146,64,.07)}
+
+.sn{
+  font-family:Georgia,serif;font-size:1.25rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.04em;color:var(--cream);margin-bottom:.5rem;
+}
+.svc-feat .sn{font-size:1.75rem;margin-bottom:.8rem}
+.sd{font-size:.83rem;line-height:1.75;color:var(--tan)}
+.svc-feat .sd{font-size:.9rem}
+.stag{
+  display:inline-block;margin-top:1.2rem;
+  font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);border:1px solid rgba(196,146,64,.28);padding:.2rem .6rem;
+}
+.snum{
+  font-family:Georgia,serif;font-size:2.8rem;font-weight:900;
+  color:rgba(196,146,64,.1);line-height:1;margin-bottom:.8rem;display:block;
+}
+
+/* ─── REVIEWS ───────────────────────────────────── */
+#reviews{
+  padding:96px 0;background:var(--panel);
+  border-top:1px solid rgba(196,146,64,.07);
+}
+.rh{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:3rem;flex-wrap:wrap;gap:1.5rem;
+}
+.rbig{display:flex;align-items:center;gap:1rem}
+.rnum{font-family:Georgia,serif;font-size:3.5rem;font-weight:900;color:var(--gold);line-height:1}
+.rmeta{display:flex;flex-direction:column;gap:.3rem}
+.rstars{display:flex;gap:3px}
+.rstar{width:14px;height:14px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.rstar.h{background:linear-gradient(to right,var(--gold) 55%,rgba(196,146,64,.2) 55%)}
+.rct{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+
+/* masonry columns */
+.revs{columns:3;column-gap:1.2rem}
+.rev{
+  break-inside:avoid;
+  background:var(--mid);border:1px solid rgba(196,146,64,.1);
+  padding:1.6rem;margin-bottom:1.2rem;
+  transition:transform .22s,border-color .22s;
+}
+.rev:hover{transform:translateY(-3px);border-color:rgba(196,146,64,.26)}
+.rqm{font-family:Georgia,serif;font-size:2.5rem;color:rgba(196,146,64,.13);line-height:1;margin-bottom:.4rem}
+.rbody{font-size:.88rem;line-height:1.8;color:var(--tan);font-style:italic;margin-bottom:1.1rem}
+.rfoot{display:flex;align-items:center;gap:.7rem}
+.rav{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--golddim),var(--panel));
+  border:1px solid rgba(196,146,64,.22);
+  display:flex;align-items:center;justify-content:center;
+  font-family:Georgia,serif;font-size:.75rem;font-weight:700;color:var(--gold);
+}
+.rname{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--cream)}
+.rsub{font-size:.58rem;color:var(--muted);margin-top:.1rem}
+.revstars{display:flex;gap:2px;margin-bottom:.75rem}
+.revstar{width:10px;height:10px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+
+/* ─── EXPERIENCE ─────────────────────────────────── */
+#experience{
+  padding:96px 0;background:var(--dark);
+  border-top:1px solid rgba(196,146,64,.07);
+}
+.exp-g{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.etext p{font-size:.93rem;line-height:1.9;color:var(--tan);margin-bottom:1.1rem}
+.etext strong{color:var(--cream)}
+
+.elist{margin-top:2.2rem;display:flex;flex-direction:column;gap:1.8rem}
+.erow{display:grid;grid-template-columns:32px 1fr;gap:1rem;align-items:start}
+.en{font-family:Georgia,serif;font-size:1.5rem;font-weight:900;color:rgba(196,146,64,.18);line-height:1;margin-top:.05rem}
+.et{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cream);margin-bottom:.3rem}
+.eb{font-size:.83rem;line-height:1.72;color:var(--tan)}
+
+.epole-scene{display:flex;flex-direction:column;align-items:center;position:relative}
+.epole-glow{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:150px;height:420px;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(176,42,34,.14) 0%,rgba(26,95,138,.07) 45%,transparent 70%);
+  animation:eg 3.5s ease-in-out infinite;
+}
+@keyframes eg{0%,100%{opacity:.55}50%{opacity:1}}
+.epole{
+  --seg:18px;--sz:92px;--spd:2.3s;--bw:4px;
+  width:78px;height:380px;
+  box-shadow:0 0 55px rgba(176,42,34,.22),0 0 100px rgba(26,95,138,.1),inset 0 0 16px rgba(0,0,0,.55);
+}
+.epole-cap{width:92px;height:19px;position:relative;left:-7px}
+.epole-ball{width:44px;height:44px;position:relative;left:-7px;box-shadow:0 5px 20px rgba(0,0,0,.6),0 0 16px rgba(196,146,64,.1)}
+
+/* ─── LOCATION ───────────────────────────────────── */
+#location{
+  padding:96px 0;background:var(--mid);
+  border-top:1px solid rgba(196,146,64,.07);
+}
+.loc-g{display:grid;grid-template-columns:1fr 1.35fr;gap:4rem;align-items:start}
+.locinfo{display:flex;flex-direction:column;gap:1.8rem}
+.locrow{display:flex;gap:1rem;align-items:flex-start}
+.locico{
+  width:36px;height:36px;flex-shrink:0;
+  border:1px solid rgba(196,146,64,.18);border-radius:1px;
+  background:rgba(196,146,64,.04);
+  display:flex;align-items:center;justify-content:center;
+}
+.locico svg{width:15px;height:15px;fill:none;stroke:var(--gold);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.loclbl{font-size:.56rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.loctxt{font-size:.9rem;line-height:1.6;color:var(--tan)}
+.loctxt a{color:var(--tan);text-decoration:none;transition:color .2s}
+.loctxt a:hover{color:var(--gold)}
+.htbl{width:100%;border-collapse:collapse}
+.htbl tr{border-bottom:1px solid rgba(196,146,64,.05)}
+.htbl td{padding:.38rem 0;font-size:.83rem}
+.htbl td:first-child{color:var(--cream);font-weight:600;width:48%}
+.htbl td:last-child{color:var(--tan);text-align:right}
+.htbl .cl td{color:var(--muted)}
+.mapframe{
+  width:100%;height:420px;border:0;display:block;
+  border:1px solid rgba(196,146,64,.14);border-radius:2px;
+  filter:saturate(0) brightness(.68);
+  transition:filter .4s;
+}
+.mapframe:hover{filter:saturate(.4) brightness(.82)}
+.mapcap{margin-top:.6rem;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-align:right}
+
+/* ─── CONTACT ────────────────────────────────────── */
+#contact{
+  padding:96px 0;background:var(--dark);
+  border-top:1px solid rgba(196,146,64,.07);
+}
+.con-g{display:grid;grid-template-columns:1fr 1px 1fr;gap:4rem;align-items:center}
+.condiv{background:rgba(196,146,64,.1);height:180px;align-self:center}
+.conleft p{font-size:.92rem;line-height:1.85;color:var(--tan);margin:1rem 0 1.6rem}
+.cphone{
+  display:block;font-family:Georgia,serif;
+  font-size:clamp(1.7rem,3.5vw,2.8rem);
+  font-weight:900;color:var(--gold);text-decoration:none;
+  letter-spacing:.02em;margin-bottom:1.4rem;
+  transition:color .2s,text-shadow .2s;
+}
+.cphone:hover{color:var(--gold2);text-shadow:0 0 28px rgba(196,146,64,.35)}
+.conright p{font-size:.88rem;line-height:1.82;color:var(--tan);margin-bottom:1rem}
+.tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.3rem}
+.tag{
+  font-size:.57rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);border:1px solid rgba(196,146,64,.25);
+  padding:.22rem .6rem;background:rgba(196,146,64,.04);
+}
+
+/* ─── FOOTER ─────────────────────────────────────── */
+footer{
+  background:var(--black);border-top:1px solid rgba(196,146,64,.1);
+  padding:2.2rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+}
+.fname{font-family:Georgia,serif;font-size:1rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
+.faddr{font-size:.6rem;letter-spacing:.1em;color:var(--muted);margin-top:.15rem}
+.fnav{display:flex;gap:1.6rem;list-style:none}
+.fnav a{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.fnav a:hover{color:var(--gold)}
+
+/* ─── RESPONSIVE ─────────────────────────────────── */
+@media(max-width:980px){
+  .about-g,.exp-g,.loc-g,.con-g{grid-template-columns:1fr}
+  .condiv{display:none}
+  .revs{columns:2}
+  .svcs{grid-template-columns:1fr 1fr}
+  .svc-feat{grid-row:span 1}
+  .hero-grid{grid-template-columns:1fr}
+  .hpole-col{display:none}
+}
+@media(max-width:620px){
+  nav{padding:0 1.1rem}
+  .nlinks{display:none}
+  .revs{columns:1}
+  .svcs{grid-template-columns:1fr}
+  footer{flex-direction:column;text-align:center}
+  .fnav{justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nbrand">
+    <div class="pole nbrand-pole"></div>
+    <div class="ntext">Manny's<small>Barbershop · East Northport, NY</small></div>
+  </a>
+  <ul class="nlinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#location">Find Us</a></li>
+    <li><a href="tel:6317579400" class="ncta">Call Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hbg"></div>
+  <div class="hero-grid">
+    <div class="hleft">
+      <p class="heye">518 Larkfield Rd &nbsp;·&nbsp; East Northport, NY 11731</p>
+      <h1 class="hname">Manny's<span class="g">Barbershop</span></h1>
+      <p class="hline">
+        The shop East Northport actually trusts.<br>
+        Real fades. Straight razor. Kids welcome. Walk in.
+      </p>
+      <div class="hbtns">
+        <a href="tel:6317579400" class="btn btn-y">(631) 757-9400 — Call to Book</a>
+        <a href="#services" class="btn btn-o">See Services</a>
+      </div>
+      <div class="hscroll" aria-hidden="true">
+        <div class="hscroll-bar"></div>
+        <span>Scroll</span>
+      </div>
+    </div>
+    <div class="hpole-col">
+      <div class="ball hpole-ball"></div>
+      <div class="cap hpole-cap"></div>
+      <div class="pole hpole"></div>
+      <div class="cap hpole-cap" style="background:linear-gradient(180deg,#888,#d8d8d8)"></div>
+      <div class="ball hpole-ball"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="tick-inner">
+    <span>Walk-ins Welcome</span><span>Skin Fades</span><span>Hot Towel Shaves</span>
+    <span>Kids Cuts</span><span>Beard Lineups</span><span>Straight Razor Finish</span>
+    <span>East Northport's Barbershop</span><span>4.7 Stars · 100+ Reviews</span>
+    <span>Walk-ins Welcome</span><span>Skin Fades</span><span>Hot Towel Shaves</span>
+    <span>Kids Cuts</span><span>Beard Lineups</span><span>Straight Razor Finish</span>
+    <span>East Northport's Barbershop</span><span>4.7 Stars · 100+ Reviews</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="w">
+    <div class="about-g">
+      <div class="atext">
+        <span class="lbl">The Shop</span>
+        <h2 class="st">Been here a while.<br><em>Still the best one.</em></h2>
+        <div class="rule"></div>
+        <p>Manny's isn't trying to be anything fancy. It's a barbershop — chairs, clippers, and guys who actually know what they're doing. People come in, get a good cut, and come back two weeks later. That's it.</p>
+        <div class="apull">"I drive past two other shops to get here. The fade is always clean, the wait is never bad, and they don't make you feel like you're inconveniencing them."</div>
+        <p>We do fades, tapers, scissor cuts, beard lineups, straight razor shaves, and <strong>kids cuts</strong>. The kids thing matters — half our regulars started coming here because someone trusted us with a nervous 4-year-old and it went well. We're patient. We're not in a rush.</p>
+        <p>Walk-ins are fine. Bring the whole family. Tell us what you want and we'll handle it. If you don't know what you want, we'll figure it out together. No judgment, no upselling, no attitude.</p>
+        <p>This is a <strong>neighborhood shop</strong>. One of the last real ones in this part of Long Island. You'll notice the difference when you sit down.</p>
+      </div>
+      <div class="aside">
+        <div class="ball aside-pball"></div>
+        <div class="cap aside-pcap"></div>
+        <div class="pole aside-pole"></div>
+        <div class="cap aside-pcap" style="background:linear-gradient(180deg,#888,#d8d8d8)"></div>
+        <div class="ball aside-pball"></div>
+        <div class="anums">
+          <div class="anum"><span class="anum-n">4.7★</span><span class="anum-l">Avg. Google Rating</span></div>
+          <div class="anum"><span class="anum-n">100+</span><span class="anum-l">Verified Reviews</span></div>
+          <div class="anum"><span class="anum-n">Open</span><span class="anum-l">Walk-ins Always Welcome</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="w">
+    <div class="sh">
+      <span class="lbl">What We Do</span>
+      <h2 class="st">The cuts.<br><em>All of them.</em></h2>
+      <div class="rule"></div>
+    </div>
+    <div class="svcs">
+      <div class="svc svc-feat">
+        <span class="snum">01</span>
+        <div class="sn">Skin Fades</div>
+        <p class="sd">Low, mid, high — whatever you want, we bring it down clean. Sharp line, smooth blend, no patchiness. This is what we're known for and we take it seriously. Come in with a reference photo or just describe it. Either works.</p>
+        <span class="stag">Most Requested</span>
+      </div>
+      <div class="svc">
+        <span class="snum">02</span>
+        <div class="sn">Classic Cuts</div>
+        <p class="sd">Crew cut, taper, ivy league. Scissor or clipper. Old technique, done right.</p>
+      </div>
+      <div class="svc">
+        <span class="snum">03</span>
+        <div class="sn">Beard Lineups</div>
+        <p class="sd">Tight edges, clean shape. Makes the whole cut land properly.</p>
+        <span class="stag">Add-on or standalone</span>
+      </div>
+      <div class="svc">
+        <span class="snum">04</span>
+        <div class="sn">Hot Towel Shave</div>
+        <p class="sd">Warm towel, real lather, straight razor. The kind of shave you can't do at home.</p>
+        <span class="stag">Premium</span>
+      </div>
+      <div class="svc">
+        <span class="snum">05</span>
+        <div class="sn">Kids Cuts</div>
+        <p class="sd">We're good with kids. Patient, calm, no rushing. Parents have told us it's the first place their kid didn't cry.</p>
+      </div>
+      <div class="svc">
+        <span class="snum">06</span>
+        <div class="sn">Razor Finish</div>
+        <p class="sd">Every cut finishes with a straight razor on the neck and edges. That last detail is what you see in the mirror.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="w">
+    <div class="rh">
+      <div>
+        <span class="lbl">What People Say</span>
+        <h2 class="st">From the regulars.</h2>
+      </div>
+      <div class="rbig">
+        <div class="rnum">4.7</div>
+        <div class="rmeta">
+          <div class="rstars">
+            <div class="rstar"></div><div class="rstar"></div>
+            <div class="rstar"></div><div class="rstar"></div><div class="rstar h"></div>
+          </div>
+          <div class="rct">100+ Google Reviews</div>
+        </div>
+      </div>
+    </div>
+    <div class="revs">
+
+      <div class="rev">
+        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
+        <div class="rqm">"</div>
+        <p class="rbody">Best fade on Long Island, I'll die on that hill. Went in not knowing what I wanted, showed him a photo, came out exactly right. Been going back every three weeks since.</p>
+        <div class="rfoot">
+          <div class="rav">JR</div>
+          <div><div class="rname">J. Rivera</div><div class="rsub">Regular since 2022</div></div>
+        </div>
+      </div>
+
+      <div class="rev">
+        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
+        <div class="rqm">"</div>
+        <p class="rbody">Took my 4-year-old. He cried the first five minutes. The barber didn't flinch, just kept talking to him, kept him distracted. Kid walked out with a clean cut and actually proud of it. That's the whole thing right there.</p>
+        <div class="rfoot">
+          <div class="rav">DM</div>
+          <div><div class="rname">Dad from Northport</div><div class="rsub">Kids cut</div></div>
+        </div>
+      </div>
+
+      <div class="rev">
+        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
+        <div class="rqm">"</div>
+        <p class="rbody">Walked in on a Tuesday around noon. Waited maybe 8 minutes, was in and out in under 30. Left sharp. I've been doing this every few weeks for two years and it's been consistent every single time.</p>
+        <div class="rfoot">
+          <div class="rav">TC</div>
+          <div><div class="rname">T. Carrillo</div><div class="rsub">Walk-in regular</div></div>
+        </div>
+      </div>
+
+      <div class="rev">
+        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
+        <div class="rqm">"</div>
+        <p class="rbody">Got the hot towel shave. Hadn't had a real one in years — figured I'd try it. Completely forgot how different it feels from doing it yourself. Worth every penny. Booked again before I left.</p>
+        <div class="rfoot">
+          <div class="rav">MP</div>
+          <div><div class="rname">M. Patel</div><div class="rsub">Hot towel shave</div></div>
+        </div>
+      </div>
+
+      <div class="rev">
+        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
+        <div class="rqm">"</div>
+        <p class="rbody">My husband, my two boys, and my father-in-law all go here. Four different heads of hair, four different styles, all handled by the same shop. Nobody's had a bad experience. That's saying something.</p>
+        <div class="rfoot">
+          <div class="rav">KL</div>
+          <div><div class="rname">K. Lombardi</div><div class="rsub">Family regular</div></div>
+        </div>
+      </div>
+
+      <div class="rev">
+        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
+        <div class="rqm">"</div>
+        <p class="rbody">Tried six different spots on Long Island in the last two years. Finally stopped looking. The quality here just doesn't slip — doesn't matter what day you go, who's cutting. Standards don't change.</p>
+        <div class="rfoot">
+          <div class="rav">AB</div>
+          <div><div class="rname">A. Brunetti</div><div class="rsub">LI native, 2 yrs</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="w">
+    <div class="exp-g">
+      <div class="etext">
+        <span class="lbl">Inside the Shop</span>
+        <h2 class="st">What to expect<br><em>when you walk in.</em></h2>
+        <div class="rule"></div>
+        <p>Nobody's going to pitch you a product. Nobody's going to make you feel rushed. You sit down, you say what you want, and you get it. The barbers here actually listen — not just nod and do whatever they feel like.</p>
+        <p>The shop is <strong>clean and straightforward</strong>. No gimmicks, no vibe-of-the-week. Same quality every time you come through the door, whether it's your first visit or your fiftieth.</p>
+        <div class="elist">
+          <div class="erow">
+            <div class="en">01</div>
+            <div>
+              <div class="et">Walk right in</div>
+              <p class="eb">No app, no booking system, no DMs. Show up. If there's a wait it's short. If there isn't, you're in the chair in two minutes.</p>
+            </div>
+          </div>
+          <div class="erow">
+            <div class="en">02</div>
+            <div>
+              <div class="et">Good with kids, seriously</div>
+              <p class="eb">Not "we tolerate kids." We're actually patient. The barbers here have done hundreds of first haircuts. They know what they're doing.</p>
+            </div>
+          </div>
+          <div class="erow">
+            <div class="en">03</div>
+            <div>
+              <div class="et">Straight razor on the neck</div>
+              <p class="eb">Every haircut. That's the standard. Clean edges, clean neckline — it's not an add-on, it's just how the cut gets finished.</p>
+            </div>
+          </div>
+          <div class="erow">
+            <div class="en">04</div>
+            <div>
+              <div class="et">Same quality every time</div>
+              <p class="eb">The regulars notice it. Doesn't matter which day, which barber. You walk out looking right. Every time.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="epole-scene">
+        <div class="epole-glow" aria-hidden="true"></div>
+        <div class="ball epole-ball"></div>
+        <div class="cap epole-cap"></div>
+        <div class="pole epole"></div>
+        <div class="cap epole-cap" style="background:linear-gradient(180deg,#888,#d8d8d8)"></div>
+        <div class="ball epole-ball"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section id="location">
+  <div class="w">
+    <div class="loc-g">
+      <div>
+        <span class="lbl">Find Us</span>
+        <h2 class="st">Come in.<br><em>We're open.</em></h2>
+        <div class="rule"></div>
+        <div class="locinfo">
+          <div class="locrow">
+            <div class="locico"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+            <div>
+              <div class="loclbl">Address</div>
+              <p class="loctxt">518 Larkfield Rd, East Northport, NY 11731</p>
+            </div>
+          </div>
+          <div class="locrow">
+            <div class="locico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.43 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.91-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div>
+              <div class="loclbl">Phone</div>
+              <p class="loctxt"><a href="tel:6317579400">(631) 757-9400</a></p>
+            </div>
+          </div>
+          <div class="locrow">
+            <div class="locico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div>
+              <div class="loclbl">Hours</div>
+              <table class="htbl">
+                <tr><td>Mon – Thu</td><td>8:30 AM – 7:00 PM</td></tr>
+                <tr><td>Friday</td><td>8:30 AM – 3:00 PM</td></tr>
+                <tr class="cl"><td>Saturday</td><td>Closed</td></tr>
+                <tr><td>Sunday</td><td>8:00 AM – 5:00 PM</td></tr>
+              </table>
+            </div>
+          </div>
+          <div style="display:flex;gap:.7rem;flex-wrap:wrap">
+            <a href="https://maps.google.com/?q=518+Larkfield+Rd+East+Northport+NY+11731" target="_blank" rel="noopener" class="btn btn-y">Get Directions</a>
+            <a href="tel:6317579400" class="btn btn-o">Call Us</a>
+          </div>
+        </div>
+      </div>
+      <div>
+        <iframe
+          class="mapframe"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3009.847!2d-73.352787!3d40.868621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e830e6f4b4f4b5%3A0x4b1b2c3d4e5f6a7b!2s518%20Larkfield%20Rd%2C%20East%20Northport%2C%20NY%2011731!5e0!3m2!1sen!2sus!4v1700000000001!5m2!1sen!2sus"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Manny's Barbershop — 518 Larkfield Rd, East Northport NY"
+        ></iframe>
+        <p class="mapcap">518 Larkfield Rd · East Northport, NY · hover to view in color</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="w">
+    <div class="con-g">
+      <div class="conleft">
+        <span class="lbl">Ready?</span>
+        <h2 class="st">Just show up.<br><em>Or call first.</em></h2>
+        <div class="rule"></div>
+        <p>Walk-ins are the norm here. No waiting weeks for an appointment, no online booking system you have to navigate. If you want to call ahead, great. If you want to just come in, that's fine too.</p>
+        <a href="tel:6317579400" class="cphone">(631) 757-9400</a>
+        <a href="tel:6317579400" class="btn btn-y">Call Now</a>
+      </div>
+      <div class="condiv"></div>
+      <div class="conright">
+        <span class="lbl">No Appointment Needed</span>
+        <p>Weekday mornings move fastest. Sundays get busy but the wait's never bad — these guys work at a good pace without making you feel like you're on a conveyor belt.</p>
+        <p>First time? Tell them what you want. Bring a photo if you've got one. If you're not sure, say that — they'll ask a few questions and figure it out. Nobody's going to make you feel stupid for not knowing the terminology.</p>
+        <div class="tags">
+          <span class="tag">Walk-ins Welcome</span>
+          <span class="tag">Kids OK</span>
+          <span class="tag">Skin Fades</span>
+          <span class="tag">Straight Razor</span>
+          <span class="tag">Hot Towel</span>
+          <span class="tag">Beard Lineups</span>
+          <span class="tag">East Northport</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="fname">Manny's Barbershop</div>
+    <div class="faddr">518 Larkfield Rd · East Northport, NY 11731 · (631) 757-9400</div>
+  </div>
+  <ul class="fnav">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#location">Find Us</a></li>
+    <li><a href="tel:6317579400">Call</a></li>
+  </ul>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  addEventListener('scroll', () => nav.classList.toggle('stuck', scrollY > 50));
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.svc,.rev,.anum,.erow,.locrow').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(18px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
