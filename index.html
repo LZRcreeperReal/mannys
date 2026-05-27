@@ -2,344 +2,154 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 <title>Manny's Barbershop — East Northport, NY</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --black:#080604;
-  --dark:#0f0c08;
-  --mid:#181310;
-  --panel:#201910;
-  --gold:#c49240;
-  --gold2:#e0b45a;
-  --golddim:#7a5c1e;
-  --cream:#ece3cd;
-  --tan:#bba882;
-  --muted:#7a6a50;
-  --red:#b02a22;
-  --blue:#1a5f8a;
-  --stripe:#f0ede8;
+  --black:#080604;--dark:#0f0c08;--mid:#181310;--panel:#201910;
+  --gold:#c49240;--gold2:#e0b45a;--golddim:#7a5c1e;
+  --cream:#ece3cd;--tan:#bba882;--muted:#7a6a50;
+  --red:#b02a22;--blue:#1a5f8a;--stripe:#f0ede8;
 }
 html{scroll-behavior:smooth}
-body{
-  background:var(--black);color:var(--cream);
-  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
-  overflow-x:hidden;-webkit-font-smoothing:antialiased;
-}
-body::after{
-  content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:.048;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size:256px;
-}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:var(--dark)}
-::-webkit-scrollbar-thumb{background:var(--golddim)}
+body{background:var(--black);color:var(--cream);font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;max-width:100vw}
+body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px}
 
-/* ═══════════════════════════════════════════════
-   BARBER POLE — smooth, no cutoff
-   Uses a wrapper with hard clip + inner div that
-   animates background-position only. No inset
-   bleeding. border-radius on wrapper clips cleanly.
-═══════════════════════════════════════════════ */
-.pole-wrap{
-  display:flex;flex-direction:column;align-items:center;gap:0;flex-shrink:0;
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BARBER POLE - HERO ONLY
+   Pure SVG: clipPath cylinder + animating stripe group
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.pole-wrap-hero {
+  flex-shrink: 0;
+  margin-left: 3rem;
+  filter: drop-shadow(0 0 40px rgba(176,42,34,.3)) drop-shadow(0 0 80px rgba(26,95,138,.15));
 }
-.pole-body{
-  position:relative;overflow:hidden;
-  border-radius:999px; /* pill shape, clips stripes */
-  border:2px solid rgba(255,255,255,.18);
+.pole-wrap-hero svg {
+  display: block;
 }
-/* The moving stripes live entirely INSIDE the clip area */
-.pole-body::before{
-  content:'';
-  position:absolute;inset:0;
-  background:repeating-linear-gradient(
-    -55deg,
-    var(--red)    0%,
-    var(--red)    20%,
-    var(--stripe) 20%,
-    var(--stripe) 35%,
-    var(--blue)   35%,
-    var(--blue)   55%,
-    var(--stripe) 55%,
-    var(--stripe) 70%
-  );
-  background-size:60px 60px;
-  animation:poleroll linear infinite;
-  animation-duration:var(--spd, 2.2s);
-  will-change:background-position;
+.pole-stripes {
+  animation: pole-scroll 2.4s linear infinite;
 }
-/* Gloss highlight on top of stripes */
-.pole-body::after{
-  content:'';position:absolute;inset:0;border-radius:inherit;
-  background:linear-gradient(
-    to right,
-    rgba(0,0,0,.38)  0%,
-    rgba(0,0,0,.05)  30%,
-    rgba(255,255,255,.18) 50%,
-    rgba(0,0,0,.05)  70%,
-    rgba(0,0,0,.35)  100%
-  );
-}
-@keyframes poleroll{
-  from{background-position:0 0}
-  to  {background-position:0 60px}
-}
-.pole-cap{
-  background:linear-gradient(180deg,#ddd 0%,#999 50%,#ccc 100%);
-  border-radius:3px;
-  box-shadow:0 3px 10px rgba(0,0,0,.55);
-  flex-shrink:0;
-}
-.pole-ball{
-  border-radius:50%;flex-shrink:0;
-  background:radial-gradient(circle at 36% 30%,#eee 0%,#bbb 30%,#888 65%,#444 100%);
-  box-shadow:0 4px 14px rgba(0,0,0,.6);
-}
-/* size variants */
-.pole-nano .pole-body {width:14px;height:38px;box-shadow:0 0 6px rgba(196,146,64,.2)}
-.pole-nano .pole-body::before{background-size:28px 28px;animation-duration:1.6s}
-.pole-nano .pole-cap  {width:18px;height:8px}
-.pole-nano .pole-ball {width:12px;height:12px}
-
-.pole-sm .pole-body {width:36px;height:190px;box-shadow:0 0 28px rgba(176,42,34,.18),inset 0 0 6px rgba(0,0,0,.4)}
-.pole-sm .pole-body::before{background-size:44px 44px;animation-duration:2s}
-.pole-sm .pole-cap  {width:44px;height:11px}
-.pole-sm .pole-ball {width:24px;height:24px}
-
-.pole-md .pole-body {width:52px;height:290px;box-shadow:0 0 44px rgba(176,42,34,.22),0 0 70px rgba(26,95,138,.1),inset 0 0 10px rgba(0,0,0,.45)}
-.pole-md .pole-body::before{background-size:56px 56px;animation-duration:2.2s}
-.pole-md .pole-cap  {width:62px;height:14px}
-.pole-md .pole-ball {width:34px;height:34px}
-
-.pole-lg .pole-body {width:72px;height:360px;box-shadow:0 0 60px rgba(176,42,34,.25),0 0 100px rgba(26,95,138,.12),inset 0 0 14px rgba(0,0,0,.5)}
-.pole-lg .pole-body::before{background-size:64px 64px;animation-duration:2.4s}
-.pole-lg .pole-cap  {width:84px;height:18px}
-.pole-lg .pole-ball {width:44px;height:44px;box-shadow:0 5px 18px rgba(0,0,0,.65),0 0 14px rgba(196,146,64,.1)}
-
-.pole-cap-bot{background:linear-gradient(180deg,#999 0%,#ddd 100%) !important}
-
-/* glow behind big poles */
-.pole-glow{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  pointer-events:none;border-radius:50%;
-  background:radial-gradient(ellipse at center,rgba(176,42,34,.15) 0%,rgba(26,95,138,.08) 40%,transparent 70%);
-  animation:glowpulse 3.5s ease-in-out infinite;
-}
-@keyframes glowpulse{0%,100%{opacity:.5}50%{opacity:1}}
-
-/* ═══════════════════════════════════════════════
-   NAV
-═══════════════════════════════════════════════ */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:800;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 1.5rem;height:60px;
-  background:rgba(8,6,4,.94);backdrop-filter:blur(18px);
-  border-bottom:1px solid rgba(196,146,64,.12);
-  transition:box-shadow .3s;
-}
-nav.stuck{box-shadow:0 2px 28px rgba(0,0,0,.8)}
-.nbrand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-.ntext{
-  font-family:Georgia,serif;font-size:.95rem;font-weight:700;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--gold);line-height:1.15;
-}
-.ntext small{
-  display:block;font-family:'Helvetica Neue',sans-serif;
-  font-size:.42rem;letter-spacing:.28em;color:var(--muted);font-weight:400;
-}
-.nlinks{display:flex;gap:1.6rem;list-style:none;align-items:center}
-.nlinks a{
-  font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--tan);text-decoration:none;transition:color .2s;white-space:nowrap;
-}
-.nlinks a:hover{color:var(--gold)}
-.ncta{
-  background:var(--gold);color:var(--black) !important;
-  padding:.36rem .9rem;font-weight:700;border-radius:1px;
-  transition:background .2s,transform .15s;
-}
-.ncta:hover{background:var(--gold2) !important;transform:translateY(-1px)}
-
-/* hamburger */
-.hamburger{
-  display:none;flex-direction:column;gap:5px;cursor:pointer;
-  background:none;border:none;padding:4px;
-}
-.hamburger span{display:block;width:22px;height:2px;background:var(--tan);border-radius:1px;transition:all .25s}
-.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.hamburger.open span:nth-child(2){opacity:0}
-.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-
-.mobile-menu{
-  display:none;position:fixed;top:60px;left:0;right:0;z-index:799;
-  background:rgba(8,6,4,.97);backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(196,146,64,.12);
-  flex-direction:column;padding:1rem 1.5rem 1.5rem;gap:.2rem;
-}
-.mobile-menu.open{display:flex}
-.mobile-menu a{
-  font-size:.85rem;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--tan);text-decoration:none;padding:.75rem 0;
-  border-bottom:1px solid rgba(196,146,64,.07);transition:color .2s;
-}
-.mobile-menu a:hover{color:var(--gold)}
-.mobile-menu .mcta{
-  margin-top:.8rem;background:var(--gold);color:var(--black);
-  text-align:center;padding:.8rem;font-weight:700;border-radius:1px;
-  border:none;
+@keyframes pole-scroll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(60px); }
 }
 
-/* ═══════════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════════ */
-#hero{
-  position:relative;overflow:hidden;
-  min-height:100svh;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:80px 5vw 56px;
-}
-.hbg{
-  position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 65% 50% at 18% 65%,rgba(90,54,6,.62) 0%,transparent 65%),
-    radial-gradient(ellipse 50% 40% at 78% 30%,rgba(25,15,3,.72) 0%,transparent 60%),
-    var(--black);
-  animation:hbreathe 14s ease-in-out infinite alternate;
-}
-@keyframes hbreathe{0%{filter:brightness(1)}100%{filter:brightness(1.1)}}
-.hbg::after{
-  content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(-55deg,transparent,transparent 38px,rgba(196,146,64,.014) 38px,rgba(196,146,64,.014) 39px);
-}
-
-.hero-grid{
-  position:relative;z-index:2;
-  display:grid;grid-template-columns:1fr auto;
-  align-items:center;gap:2rem;
-  max-width:1100px;
-}
-.heye{
-  font-size:.58rem;letter-spacing:.46em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:1.4rem;
-  display:flex;align-items:center;gap:.7rem;
-}
-.heye::before{content:'';width:24px;height:1px;background:var(--gold);flex-shrink:0}
-h1.hname{
-  font-family:Georgia,serif;
-  font-size:clamp(3.2rem,9vw,8.5rem);
-  font-weight:900;line-height:.88;
-  text-transform:uppercase;letter-spacing:-.022em;
-  color:var(--cream);
-}
-h1.hname .g{color:var(--gold);display:block;font-size:clamp(3.6rem,11vw,10rem)}
-.hline{
-  margin-top:1.6rem;
-  font-size:clamp(.82rem,1.8vw,.96rem);
-  color:var(--tan);line-height:1.75;
-  max-width:400px;
-  padding-left:1rem;
-  border-left:2px solid var(--golddim);
-}
-.hbtns{display:flex;gap:.75rem;margin-top:1.8rem;flex-wrap:wrap}
-.btn{
-  display:inline-block;text-decoration:none;
-  font-size:.7rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
-  padding:.78rem 1.6rem;border-radius:1px;transition:all .2s;
-}
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SHARED UTILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.w{max-width:1100px;margin:0 auto;padding:0 1.5rem}
+.lbl{font-size:.54rem;letter-spacing:.46em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.7rem}
+.rule{width:40px;height:2px;background:linear-gradient(to right,var(--gold),var(--golddim));margin:1.1rem 0}
+h2.st{font-family:Georgia,serif;font-size:clamp(1.75rem,5vw,3rem);font-weight:900;text-transform:uppercase;line-height:.95;letter-spacing:-.01em;color:var(--cream);margin-top:.2rem}
+h2.st em{font-style:normal;color:var(--gold)}
+.btn{display:inline-block;text-decoration:none;font-size:.7rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;padding:.78rem 1.6rem;border-radius:1px;transition:all .2s;cursor:pointer;border:none}
 .btn-y{background:var(--gold);color:var(--black)}
 .btn-y:hover{background:var(--gold2);box-shadow:0 5px 20px rgba(196,146,64,.3);transform:translateY(-2px)}
 .btn-o{background:transparent;color:var(--cream);border:1px solid rgba(236,227,205,.22)}
 .btn-o:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
-.hscroll{
-  margin-top:2.2rem;display:flex;align-items:center;gap:.7rem;opacity:.35;
-}
-.hscroll span{font-size:.52rem;letter-spacing:.4em;text-transform:uppercase;color:var(--tan)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   NAV
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+nav{position:fixed;top:0;left:0;right:0;z-index:800;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:60px;background:rgba(8,6,4,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(196,146,64,.12);transition:box-shadow .3s}
+nav.stuck{box-shadow:0 2px 28px rgba(0,0,0,.8)}
+.nbrand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.ntext{font-family:Georgia,serif;font-size:.95rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);line-height:1.15}
+.ntext small{display:block;font-family:'Helvetica Neue',sans-serif;font-size:.42rem;letter-spacing:.28em;color:var(--muted);font-weight:400}
+.nlinks{display:flex;gap:1.6rem;list-style:none;align-items:center}
+.nlinks a{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tan);text-decoration:none;transition:color .2s;white-space:nowrap}
+.nlinks a:hover{color:var(--gold)}
+.ncta{background:var(--gold);color:var(--black) !important;padding:.36rem .9rem;font-weight:700;border-radius:1px;transition:background .2s}
+.ncta:hover{background:var(--gold2) !important}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--tan);border-radius:1px;transition:all .25s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mmenu{display:none;position:fixed;top:60px;left:0;right:0;z-index:799;background:rgba(8,6,4,.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(196,146,64,.12);flex-direction:column;padding:0 1.5rem 1.2rem}
+.mmenu.open{display:flex}
+.mmenu a{font-size:.88rem;letter-spacing:.14em;text-transform:uppercase;color:var(--tan);text-decoration:none;padding:.8rem 0;border-bottom:1px solid rgba(196,146,64,.07);transition:color .2s}
+.mmenu a:last-child{border-bottom:none;margin-top:.5rem;background:var(--gold);color:var(--black);text-align:center;padding:.85rem;font-weight:700;border-radius:1px}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HERO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#hero{position:relative;overflow:hidden;min-height:100svh;display:flex;align-items:center;padding:80px 5vw 60px}
+.hbg{position:absolute;inset:0;background:radial-gradient(ellipse 65% 50% at 18% 65%,rgba(90,54,6,.62) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 78% 30%,rgba(25,15,3,.72) 0%,transparent 60%),var(--black);animation:hbreathe 14s ease-in-out infinite alternate}
+@keyframes hbreathe{0%{filter:brightness(1)}100%{filter:brightness(1.1)}}
+.hbg::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent,transparent 38px,rgba(196,146,64,.014) 38px,rgba(196,146,64,.014) 39px)}
+.hero-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:0;width:100%;max-width:1100px}
+.hero-text{flex:1;min-width:0}
+.heye{font-size:.58rem;letter-spacing:.44em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;display:flex;align-items:center;gap:.7rem}
+.heye::before{content:'';width:24px;height:1px;background:var(--gold);flex-shrink:0}
+h1.hname{font-family:Georgia,serif;font-size:clamp(3rem,9vw,8.5rem);font-weight:900;line-height:.88;text-transform:uppercase;letter-spacing:-.022em;color:var(--cream)}
+h1.hname .g{color:var(--gold);display:block;font-size:clamp(3.4rem,11vw,10rem)}
+.hline{margin-top:1.6rem;font-size:clamp(.82rem,1.8vw,.96rem);color:var(--tan);line-height:1.75;max-width:400px;padding-left:1rem;border-left:2px solid var(--golddim)}
+.hbtns{display:flex;gap:.75rem;margin-top:1.8rem;flex-wrap:wrap}
+.hscroll{margin-top:2rem;display:flex;align-items:center;gap:.7rem;opacity:.35}
+.hscroll span{font-size:.52rem;letter-spacing:.38em;text-transform:uppercase;color:var(--tan)}
 .hscroll-bar{width:28px;height:1px;background:linear-gradient(to right,var(--gold),transparent);animation:sbar 2s ease-in-out infinite}
 @keyframes sbar{0%,100%{opacity:.4;width:24px}50%{opacity:1;width:40px}}
 
-/* ═══════════════════════════════════════════════
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    TICKER
-═══════════════════════════════════════════════ */
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .ticker{background:var(--gold);padding:.48rem 0;overflow:hidden;position:relative;z-index:10}
 .tick-inner{display:flex;white-space:nowrap;animation:tick 22s linear infinite}
-.tick-inner span{
-  font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--black);padding:0 1.8rem;
-}
+.tick-inner span{font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--black);padding:0 1.8rem}
 .tick-inner span::before{content:'✦';margin-right:1.8rem;opacity:.4}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* ═══════════════════════════════════════════════
-   SHARED
-═══════════════════════════════════════════════ */
-.w{max-width:1100px;margin:0 auto;padding:0 1.5rem}
-.lbl{font-size:.54rem;letter-spacing:.46em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.75rem}
-.rule{width:40px;height:2px;background:linear-gradient(to right,var(--gold),var(--golddim));margin:1.2rem 0}
-h2.st{
-  font-family:Georgia,serif;
-  font-size:clamp(1.8rem,4vw,3rem);
-  font-weight:900;text-transform:uppercase;line-height:.95;
-  letter-spacing:-.01em;color:var(--cream);margin-top:.2rem;
-}
-h2.st em{font-style:normal;color:var(--gold)}
-
-/* ═══════════════════════════════════════════════
-   ABOUT
-═══════════════════════════════════════════════ */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ABOUT - SCISSORS DETAIL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 #about{padding:80px 0;background:var(--dark);border-top:1px solid rgba(196,146,64,.07)}
 .about-g{display:grid;grid-template-columns:1fr 240px;gap:4rem;align-items:start}
-.atext p{font-size:.94rem;line-height:1.95;color:var(--tan);margin-bottom:1.15rem}
+.atext p{font-size:.94rem;line-height:1.95;color:var(--tan);margin-bottom:1.1rem}
 .atext strong{color:var(--cream)}
-.atext p:last-child{margin-bottom:0}
-.apull{
-  margin:1.6rem 0;padding:1rem 1.3rem;
-  border-left:3px solid var(--gold);background:rgba(196,146,64,.04);
-  font-size:.97rem;color:var(--cream);line-height:1.65;
+.apull{margin:1.6rem 0;padding:1rem 1.3rem;border-left:3px solid var(--gold);background:rgba(196,146,64,.04);font-size:.97rem;color:var(--cream);line-height:1.65}
+.aside{display:flex;flex-direction:column;align-items:center;gap:2rem}
+.scissors-deco {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  position: relative;
 }
-.aside{display:flex;flex-direction:column;align-items:center;gap:0}
-.anums{display:flex;flex-direction:column;gap:1px;margin-top:1.6rem;width:100%}
-.anum{
-  padding:1.2rem 1.1rem;background:rgba(196,146,64,.04);border:1px solid rgba(196,146,64,.1);
-  transition:border-color .25s,background .25s;
+.scissors-deco svg {
+  width: 100px;
+  height: auto;
+  opacity: .3;
 }
+.anums{display:flex;flex-direction:column;gap:1px;width:100%}
+.anum{padding:1.2rem 1.1rem;background:rgba(196,146,64,.04);border:1px solid rgba(196,146,64,.1);transition:border-color .25s,background .25s}
 .anum:hover{border-color:rgba(196,146,64,.3);background:rgba(196,146,64,.08)}
 .anum-n{font-family:Georgia,serif;font-size:2.2rem;font-weight:900;color:var(--gold);line-height:1;display:block;margin-bottom:.2rem}
-.anum-l{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.anum-l{font-size:.54rem;letter-spacing:.17em;text-transform:uppercase;color:var(--muted)}
 
-/* ═══════════════════════════════════════════════
-   SERVICES
-═══════════════════════════════════════════════ */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SERVICES - CLIPPER CARDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 #services{padding:80px 0;background:var(--mid);border-top:1px solid rgba(196,146,64,.07)}
 .sh{margin-bottom:2.5rem}
-.svcs{
-  display:grid;grid-template-columns:2.2fr 1fr 1fr;
-  gap:1px;background:rgba(196,146,64,.07);border:1px solid rgba(196,146,64,.07);
-}
-.svc{
-  background:var(--mid);padding:1.8rem 1.6rem;
-  position:relative;overflow:hidden;cursor:default;transition:background .25s;
-}
-.svc::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:linear-gradient(to right,transparent,var(--gold),transparent);
-  transform:scaleX(0);transition:transform .35s;
-}
-.svc:hover{background:rgba(196,146,64,.04)}
-.svc:hover::after{transform:scaleX(1)}
-.svc-feat{grid-row:span 2;border-right:1px solid rgba(196,146,64,.07)}
+.svcs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;background:transparent}
+.svc{background:linear-gradient(135deg,rgba(196,146,64,.08),rgba(196,146,64,.02));padding:2rem 1.8rem;position:relative;overflow:hidden;cursor:default;transition:all .25s;border:1px solid rgba(196,146,64,.12);border-radius:2px}
+.svc::before{content:'';position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:0;transition:opacity .35s}
+.svc:hover{background:linear-gradient(135deg,rgba(196,146,64,.14),rgba(196,146,64,.05));border-color:rgba(196,146,64,.24);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.svc:hover::before{opacity:1}
+.svc-feat{grid-column:span 1}
 .sn{font-family:Georgia,serif;font-size:1.2rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--cream);margin-bottom:.45rem}
-.svc-feat .sn{font-size:1.65rem;margin-bottom:.75rem}
+.svc-feat .sn{font-size:1.3rem}
 .sd{font-size:.82rem;line-height:1.75;color:var(--tan)}
-.svc-feat .sd{font-size:.88rem}
-.stag{display:inline-block;margin-top:1.1rem;font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(196,146,64,.28);padding:.18rem .55rem}
-.snum{font-family:Georgia,serif;font-size:2.5rem;font-weight:900;color:rgba(196,146,64,.1);line-height:1;margin-bottom:.75rem;display:block}
+.stag{display:inline-block;margin-top:1rem;font-size:.54rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(196,146,64,.28);padding:.18rem .55rem;background:rgba(196,146,64,.02)}
+.snum{font-family:Georgia,serif;font-size:2.8rem;font-weight:900;color:rgba(196,146,64,.08);line-height:1;margin-bottom:.7rem;display:block}
 
-/* ═══════════════════════════════════════════════
-   REVIEWS
-═══════════════════════════════════════════════ */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   REVIEWS - FRAMED QUOTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 #reviews{padding:80px 0;background:var(--panel);border-top:1px solid rgba(196,146,64,.07)}
 .rh{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1.2rem}
 .rbig{display:flex;align-items:center;gap:.9rem}
@@ -349,66 +159,47 @@ h2.st em{font-style:normal;color:var(--gold)}
 .rstar{width:13px;height:13px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 .rstar.h{background:linear-gradient(to right,var(--gold) 55%,rgba(196,146,64,.2) 55%)}
 .rct{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-.revs{columns:3;column-gap:1.1rem}
-.rev{
-  break-inside:avoid;background:var(--mid);border:1px solid rgba(196,146,64,.1);
-  padding:1.4rem;margin-bottom:1.1rem;transition:transform .22s,border-color .22s;
-}
-.rev:hover{transform:translateY(-3px);border-color:rgba(196,146,64,.26)}
-.rqm{font-family:Georgia,serif;font-size:2.2rem;color:rgba(196,146,64,.13);line-height:1;margin-bottom:.35rem}
-.rbody{font-size:.87rem;line-height:1.8;color:var(--tan);font-style:italic;margin-bottom:1rem}
+.revs{columns:3;column-gap:1.2rem}
+.rev{break-inside:avoid;background:var(--black);border:2px solid rgba(196,146,64,.15);padding:1.8rem;margin-bottom:1.2rem;transition:all .22s;position:relative}
+.rev::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--gold),transparent);opacity:0;transition:opacity .22s}
+.rev:hover{border-color:rgba(196,146,64,.36);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.6)}
+.rev:hover::before{opacity:1}
+.rqm{font-family:Georgia,serif;font-size:2.8rem;color:rgba(196,146,64,.12);line-height:1;margin-bottom:.5rem}
+.rbody{font-size:.87rem;line-height:1.8;color:var(--tan);margin-bottom:1.2rem}
 .rfoot{display:flex;align-items:center;gap:.65rem}
-.rav{
-  width:30px;height:30px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,var(--golddim),var(--panel));
-  border:1px solid rgba(196,146,64,.22);
-  display:flex;align-items:center;justify-content:center;
-  font-family:Georgia,serif;font-size:.72rem;font-weight:700;color:var(--gold);
-}
+.rav{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--golddim),var(--panel));border:2px solid rgba(196,146,64,.24);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:.78rem;font-weight:700;color:var(--gold)}
 .rname{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--cream)}
 .rsub{font-size:.56rem;color:var(--muted);margin-top:.08rem}
 .revstars{display:flex;gap:2px;margin-bottom:.65rem}
 .revstar{width:10px;height:10px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 
-/* ═══════════════════════════════════════════════
-   EXPERIENCE
-═══════════════════════════════════════════════ */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   EXPERIENCE - NUMBERED LIST WITH ACCENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 #experience{padding:80px 0;background:var(--dark);border-top:1px solid rgba(196,146,64,.07)}
 .exp-g{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
 .etext p{font-size:.92rem;line-height:1.9;color:var(--tan);margin-bottom:1rem}
 .etext strong{color:var(--cream)}
-.elist{margin-top:2rem;display:flex;flex-direction:column;gap:1.6rem}
-.erow{display:grid;grid-template-columns:30px 1fr;gap:.9rem;align-items:start}
-.en{font-family:Georgia,serif;font-size:1.4rem;font-weight:900;color:rgba(196,146,64,.18);line-height:1;margin-top:.05rem}
-.et{font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--cream);margin-bottom:.25rem}
+.elist{margin-top:2rem;display:flex;flex-direction:column;gap:1.8rem}
+.erow{display:grid;grid-template-columns:50px 1fr;gap:1.2rem;align-items:start;position:relative;padding-left:1rem}
+.erow::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),transparent);opacity:.4}
+.en{font-family:Georgia,serif;font-size:1.8rem;font-weight:900;color:rgba(196,146,64,.2);line-height:1}
+.et{font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--cream);margin-bottom:.35rem}
 .eb{font-size:.82rem;line-height:1.72;color:var(--tan)}
+.exp-visual{display:flex;align-items:center;justify-content:center;position:relative;padding:2rem}
+.exp-visual svg{width:200px;height:auto;opacity:.15}
 
-.epole-scene{
-  display:flex;flex-direction:column;align-items:center;
-  position:relative;padding:1rem 0;
-}
-.epole-glow{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:140px;height:400px;pointer-events:none;
-  background:radial-gradient(ellipse at center,rgba(176,42,34,.13) 0%,rgba(26,95,138,.07) 45%,transparent 70%);
-  animation:glowpulse 3.5s ease-in-out infinite;
-}
-
-/* ═══════════════════════════════════════════════
-   LOCATION
-═══════════════════════════════════════════════ */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   LOCATION - MAP WITH INFO CARDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 #location{padding:80px 0;background:var(--mid);border-top:1px solid rgba(196,146,64,.07)}
 .loc-g{display:grid;grid-template-columns:1fr 1.35fr;gap:3.5rem;align-items:start}
 .locinfo{display:flex;flex-direction:column;gap:1.6rem}
-.locrow{display:flex;gap:.9rem;align-items:flex-start}
-.locico{
-  width:34px;height:34px;flex-shrink:0;
-  border:1px solid rgba(196,146,64,.18);border-radius:1px;
-  background:rgba(196,146,64,.04);
-  display:flex;align-items:center;justify-content:center;
-}
-.locico svg{width:14px;height:14px;fill:none;stroke:var(--gold);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.loclbl{font-size:.54rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:.28rem}
+.locrow{display:flex;gap:.9rem;align-items:flex-start;padding:1.2rem;background:rgba(196,146,64,.04);border-left:3px solid rgba(196,146,64,.24);transition:all .25s}
+.locrow:hover{background:rgba(196,146,64,.08);border-left-color:var(--gold)}
+.locico{width:40px;height:40px;flex-shrink:0;border:2px solid rgba(196,146,64,.2);border-radius:50%;background:rgba(196,146,64,.06);display:flex;align-items:center;justify-content:center}
+.locico svg{width:18px;height:18px;fill:none;stroke:var(--gold);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.loclbl{font-size:.54rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:.28rem}
 .loctxt{font-size:.88rem;line-height:1.6;color:var(--tan)}
 .loctxt a{color:var(--tan);text-decoration:none;transition:color .2s}
 .loctxt a:hover{color:var(--gold)}
@@ -418,126 +209,72 @@ h2.st em{font-style:normal;color:var(--gold)}
 .htbl td:first-child{color:var(--cream);font-weight:600;width:48%}
 .htbl td:last-child{color:var(--tan);text-align:right}
 .htbl .cl td{color:var(--muted)}
-.mapframe{
-  width:100%;height:400px;border:0;display:block;
-  border:1px solid rgba(196,146,64,.14);border-radius:2px;
-  filter:saturate(0) brightness(.68);transition:filter .4s;
-}
-.mapframe:hover,.mapframe:focus{filter:saturate(.4) brightness(.82)}
+.mapframe{width:100%;height:400px;border:0;display:block;border:2px solid rgba(196,146,64,.14);border-radius:2px;filter:saturate(0) brightness(.68);transition:filter .4s}
+.mapframe:hover{filter:saturate(.4) brightness(.82)}
 .mapcap{margin-top:.5rem;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:right}
 
-/* ═══════════════════════════════════════════════
-   CONTACT
-═══════════════════════════════════════════════ */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CONTACT - BOLD CTA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 #contact{padding:80px 0;background:var(--dark);border-top:1px solid rgba(196,146,64,.07)}
 .con-g{display:grid;grid-template-columns:1fr 1px 1fr;gap:4rem;align-items:center}
-.condiv{background:rgba(196,146,64,.1);height:180px;align-self:center}
+.condiv{background:rgba(196,146,64,.08);height:200px;align-self:center}
 .conleft p{font-size:.9rem;line-height:1.85;color:var(--tan);margin:1rem 0 1.5rem}
-.cphone{
-  display:block;font-family:Georgia,serif;
-  font-size:clamp(1.6rem,3.2vw,2.6rem);
-  font-weight:900;color:var(--gold);text-decoration:none;
-  letter-spacing:.02em;margin-bottom:1.3rem;
-  transition:color .2s,text-shadow .2s;
-}
+.cphone{display:block;font-family:Georgia,serif;font-size:clamp(1.6rem,3.2vw,2.6rem);font-weight:900;color:var(--gold);text-decoration:none;letter-spacing:.02em;margin-bottom:1.3rem;transition:color .2s,text-shadow .2s}
 .cphone:hover{color:var(--gold2);text-shadow:0 0 28px rgba(196,146,64,.35)}
 .conright p{font-size:.87rem;line-height:1.82;color:var(--tan);margin-bottom:.9rem}
 .tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.2rem}
-.tag{
-  font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold);border:1px solid rgba(196,146,64,.24);
-  padding:.2rem .55rem;background:rgba(196,146,64,.04);
-}
+.tag{font-size:.55rem;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(196,146,64,.24);padding:.2rem .55rem;background:rgba(196,146,64,.04);transition:all .2s}
+.tag:hover{border-color:var(--gold);background:rgba(196,146,64,.12)}
 
-/* ═══════════════════════════════════════════════
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    FOOTER
-═══════════════════════════════════════════════ */
-footer{
-  background:var(--black);border-top:1px solid rgba(196,146,64,.1);
-  padding:2rem 1.5rem;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;
-}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+footer{background:var(--black);border-top:1px solid rgba(196,146,64,.1);padding:2rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 .fname{font-family:Georgia,serif;font-size:.95rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
 .faddr{font-size:.58rem;letter-spacing:.08em;color:var(--muted);margin-top:.14rem}
 .fnav{display:flex;gap:1.4rem;list-style:none;flex-wrap:wrap}
-.fnav a{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.fnav a{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
 .fnav a:hover{color:var(--gold)}
 
-/* ═══════════════════════════════════════════════
-   RESPONSIVE — tablet 768-980
-═══════════════════════════════════════════════ */
-@media(max-width:980px){
-  .about-g{grid-template-columns:1fr}
-  .aside{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:1.5rem}
-  .aside .pole-wrap{display:none} /* hide pole on tablet, show stats */
-  .anums{flex-direction:row;flex-wrap:wrap;margin-top:0;gap:1px;width:100%}
-  .anum{flex:1;min-width:130px}
-  .exp-g{grid-template-columns:1fr}
-  .epole-scene{display:none}
-  .loc-g{grid-template-columns:1fr}
-  .con-g{grid-template-columns:1fr}
-  .condiv{display:none}
-  .revs{columns:2}
-  .svcs{grid-template-columns:1fr 1fr}
-  .svc-feat{grid-row:span 1}
-  .hero-grid{grid-template-columns:1fr}
-  .hpole-col{display:none}
-}
-
-/* ═══════════════════════════════════════════════
-   RESPONSIVE — mobile < 640
-═══════════════════════════════════════════════ */
-@media(max-width:640px){
-  /* nav */
-  nav{padding:0 1rem}
-  .nlinks{display:none}
-  .hamburger{display:flex}
-
-  /* hero */
-  #hero{padding:70px 1.2rem 40px;min-height:100svh}
-  h1.hname{font-size:clamp(3rem,14vw,5rem)}
-  h1.hname .g{font-size:clamp(3.4rem,16vw,5.8rem)}
-  .hline{font-size:.85rem;max-width:100%}
-  .hbtns{flex-direction:column;gap:.6rem}
-  .hbtns .btn{text-align:center}
-  .hscroll{margin-top:1.6rem}
-
-  /* sections */
-  #about,#services,#reviews,#experience,#location,#contact{padding:60px 0}
-  .w{padding:0 1.1rem}
-  h2.st{font-size:clamp(1.65rem,7vw,2.4rem)}
-
-  /* services */
-  .svcs{grid-template-columns:1fr;gap:1px}
-  .svc-feat{grid-row:span 1}
-
-  /* reviews */
-  .revs{columns:1}
-  .rh{flex-direction:column;align-items:flex-start;gap:1rem}
-
-  /* location */
-  .mapframe{height:280px}
-
-  /* contact */
-  .cphone{font-size:1.6rem}
-
-  /* footer */
-  footer{flex-direction:column;text-align:center;gap:.8rem}
-  .fnav{justify-content:center}
-
-  /* ticker smaller */
-  .tick-inner span{font-size:.58rem;padding:0 1.2rem}
-  .tick-inner span::before{margin-right:1.2rem}
-}
-
-/* ═══════════════════════════════════════════════
-   RESPONSIVE — small mobile < 400
-═══════════════════════════════════════════════ */
-@media(max-width:400px){
-  h1.hname{font-size:2.8rem}
-  h1.hname .g{font-size:3.2rem}
-  .btn{padding:.72rem 1.2rem;font-size:.66rem}
-}
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MOBILE OVERRIDES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+body.is-mobile .nlinks{display:none}
+body.is-mobile .hamburger{display:flex}
+body.is-mobile #hero{padding:70px 1.2rem 44px}
+body.is-mobile .hero-inner{flex-direction:column;gap:0}
+body.is-mobile .pole-hero{display:none}
+body.is-mobile h1.hname{font-size:13vw}
+body.is-mobile h1.hname .g{font-size:15vw}
+body.is-mobile .hline{font-size:.88rem;max-width:100%}
+body.is-mobile .hbtns{flex-direction:column}
+body.is-mobile .hbtns .btn{text-align:center;width:100%}
+body.is-mobile .hscroll{margin-top:1.4rem}
+body.is-mobile #about,
+body.is-mobile #services,
+body.is-mobile #reviews,
+body.is-mobile #experience,
+body.is-mobile #location,
+body.is-mobile #contact{padding:52px 0}
+body.is-mobile .w{padding:0 1rem}
+body.is-mobile .about-g{grid-template-columns:1fr;gap:2rem}
+body.is-mobile .svcs{grid-template-columns:1fr;gap:1.2rem}
+body.is-mobile .revs{columns:1}
+body.is-mobile .rh{flex-direction:column;align-items:flex-start;gap:.8rem}
+body.is-mobile .exp-g{grid-template-columns:1fr;gap:2rem}
+body.is-mobile .exp-visual{display:none}
+body.is-mobile .loc-g{grid-template-columns:1fr;gap:2rem}
+body.is-mobile .mapframe{height:260px}
+body.is-mobile .mapcap{text-align:left}
+body.is-mobile .con-g{grid-template-columns:1fr;gap:2rem}
+body.is-mobile .condiv{display:none}
+body.is-mobile .cphone{font-size:1.7rem}
+body.is-mobile .conleft .btn{width:100%;text-align:center}
+body.is-mobile footer{flex-direction:column;text-align:center}
+body.is-mobile .fnav{justify-content:center}
+body.is-mobile .tick-inner span{font-size:.56rem;padding:0 1.1rem}
+body.is-mobile ::-webkit-scrollbar{width:0px}
 </style>
 </head>
 <body>
@@ -545,13 +282,6 @@ footer{
 <!-- NAV -->
 <nav id="nav">
   <a href="#hero" class="nbrand">
-    <div class="pole-wrap pole-nano">
-      <div class="pole-ball"></div>
-      <div class="pole-cap"></div>
-      <div class="pole-body"></div>
-      <div class="pole-cap pole-cap-bot"></div>
-      <div class="pole-ball"></div>
-    </div>
     <div class="ntext">Manny's<small>Barbershop · East Northport, NY</small></div>
   </a>
   <ul class="nlinks">
@@ -561,31 +291,28 @@ footer{
     <li><a href="#location">Find Us</a></li>
     <li><a href="tel:6317579400" class="ncta">Call Now</a></li>
   </ul>
-  <button class="hamburger" id="ham" aria-label="Open menu">
+  <button class="hamburger" id="ham" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- MOBILE MENU -->
-<div class="mobile-menu" id="mmenu">
-  <a href="#about"    onclick="closeMenu()">About</a>
-  <a href="#services" onclick="closeMenu()">Services</a>
-  <a href="#reviews"  onclick="closeMenu()">Reviews</a>
-  <a href="#location" onclick="closeMenu()">Find Us</a>
-  <a href="tel:6317579400" class="mcta">Call Now — (631) 757-9400</a>
+<div class="mmenu" id="mmenu">
+  <a href="#about"    onclick="closeMM()">About</a>
+  <a href="#services" onclick="closeMM()">Services</a>
+  <a href="#reviews"  onclick="closeMM()">Reviews</a>
+  <a href="#location" onclick="closeMM()">Find Us</a>
+  <a href="tel:6317579400">Call — (631) 757-9400</a>
 </div>
 
 <!-- HERO -->
 <section id="hero">
   <div class="hbg"></div>
-  <div class="hero-grid">
-    <div class="hleft">
+  <div class="hero-inner">
+    <div class="hero-text">
       <p class="heye">518 Larkfield Rd &nbsp;·&nbsp; East Northport, NY 11731</p>
       <h1 class="hname">Manny's<span class="g">Barbershop</span></h1>
-      <p class="hline">
-        The shop East Northport actually trusts.<br>
-        Real fades. Straight razor. Kids welcome. Walk in.
-      </p>
+      <p class="hline">The shop East Northport actually trusts.<br>Real fades. Straight razor. Kids welcome. Walk in.</p>
       <div class="hbtns">
         <a href="tel:6317579400" class="btn btn-y">(631) 757-9400 — Call to Book</a>
         <a href="#services" class="btn btn-o">See Services</a>
@@ -595,13 +322,93 @@ footer{
         <span>Scroll</span>
       </div>
     </div>
-    <!-- hero pole — hidden on mobile via media query -->
-    <div class="hpole-col pole-wrap pole-md" style="margin-right:1rem">
-      <div class="pole-ball"></div>
-      <div class="pole-cap"></div>
-      <div class="pole-body"></div>
-      <div class="pole-cap pole-cap-bot"></div>
-      <div class="pole-ball"></div>
+    <div class="pole-wrap-hero">
+      <svg width="80" height="400" viewBox="0 0 80 400" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Clip to the cylinder body only -->
+          <clipPath id="barrel">
+            <rect x="16" y="30" width="48" height="340" rx="24" ry="24"/>
+          </clipPath>
+          <!-- Gloss overlay gradient -->
+          <linearGradient id="gloss" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="rgba(0,0,0,.55)"/>
+            <stop offset="22%"  stop-color="rgba(0,0,0,.08)"/>
+            <stop offset="48%"  stop-color="rgba(255,255,255,.28)"/>
+            <stop offset="75%"  stop-color="rgba(0,0,0,.06)"/>
+            <stop offset="100%" stop-color="rgba(0,0,0,.52)"/>
+          </linearGradient>
+          <!-- Cap gradient -->
+          <linearGradient id="cap-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%"   stop-color="#e0e0e0"/>
+            <stop offset="50%"  stop-color="#999"/>
+            <stop offset="100%" stop-color="#c8c8c8"/>
+          </linearGradient>
+          <!-- Ball gradient -->
+          <radialGradient id="ball-grad" cx="35%" cy="30%" r="65%">
+            <stop offset="0%"   stop-color="#f0f0f0"/>
+            <stop offset="40%"  stop-color="#bbb"/>
+            <stop offset="75%"  stop-color="#888"/>
+            <stop offset="100%" stop-color="#444"/>
+          </radialGradient>
+        </defs>
+
+        <!-- ── TOP BALL ── -->
+        <circle cx="40" cy="10" r="11" fill="url(#ball-grad)" stroke="rgba(255,255,255,.15)" stroke-width="0.5"/>
+
+        <!-- ── TOP CAP ── -->
+        <rect x="12" y="20" width="56" height="12" rx="2" fill="url(#cap-grad)" stroke="rgba(255,255,255,.1)" stroke-width="0.5"/>
+
+        <!-- ── STRIPE BODY (clipped) ── -->
+        <g clip-path="url(#barrel)">
+          <!-- Repeating stripe group animated downward.
+               Each group is 60px tall (3 stripes × 20px).
+               We stack TWO groups so there's always one in view
+               while the other scrolls back in from the top.
+               The animation moves exactly 60px = one full repeat. -->
+          <g class="pole-stripes">
+            <!-- Stripe block repeated from -60 so top is always covered -->
+            <!-- Red -->
+            <rect x="0" y="-60" width="160" height="20" fill="#b02a22" transform="skewY(-35)"/>
+            <rect x="0" y="0"   width="160" height="20" fill="#b02a22" transform="skewY(-35)"/>
+            <rect x="0" y="60"  width="160" height="20" fill="#b02a22" transform="skewY(-35)"/>
+            <rect x="0" y="120" width="160" height="20" fill="#b02a22" transform="skewY(-35)"/>
+            <rect x="0" y="180" width="160" height="20" fill="#b02a22" transform="skewY(-35)"/>
+            <rect x="0" y="240" width="160" height="20" fill="#b02a22" transform="skewY(-35)"/>
+            <rect x="0" y="300" width="160" height="20" fill="#b02a22" transform="skewY(-35)"/>
+            <rect x="0" y="360" width="160" height="20" fill="#b02a22" transform="skewY(-35)"/>
+            <!-- White -->
+            <rect x="0" y="-40" width="160" height="20" fill="#f0ede8" transform="skewY(-35)"/>
+            <rect x="0" y="20"  width="160" height="20" fill="#f0ede8" transform="skewY(-35)"/>
+            <rect x="0" y="80"  width="160" height="20" fill="#f0ede8" transform="skewY(-35)"/>
+            <rect x="0" y="140" width="160" height="20" fill="#f0ede8" transform="skewY(-35)"/>
+            <rect x="0" y="200" width="160" height="20" fill="#f0ede8" transform="skewY(-35)"/>
+            <rect x="0" y="260" width="160" height="20" fill="#f0ede8" transform="skewY(-35)"/>
+            <rect x="0" y="320" width="160" height="20" fill="#f0ede8" transform="skewY(-35)"/>
+            <rect x="0" y="380" width="160" height="20" fill="#f0ede8" transform="skewY(-35)"/>
+            <!-- Blue -->
+            <rect x="0" y="-20" width="160" height="20" fill="#1a5f8a" transform="skewY(-35)"/>
+            <rect x="0" y="40"  width="160" height="20" fill="#1a5f8a" transform="skewY(-35)"/>
+            <rect x="0" y="100" width="160" height="20" fill="#1a5f8a" transform="skewY(-35)"/>
+            <rect x="0" y="160" width="160" height="20" fill="#1a5f8a" transform="skewY(-35)"/>
+            <rect x="0" y="220" width="160" height="20" fill="#1a5f8a" transform="skewY(-35)"/>
+            <rect x="0" y="280" width="160" height="20" fill="#1a5f8a" transform="skewY(-35)"/>
+            <rect x="0" y="340" width="160" height="20" fill="#1a5f8a" transform="skewY(-35)"/>
+            <rect x="0" y="400" width="160" height="20" fill="#1a5f8a" transform="skewY(-35)"/>
+          </g>
+
+          <!-- Gloss on top of stripes, inside clip -->
+          <rect x="16" y="30" width="48" height="340" fill="url(#gloss)"/>
+        </g>
+
+        <!-- Barrel border ring -->
+        <rect x="16" y="30" width="48" height="340" rx="24" ry="24" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+
+        <!-- ── BOTTOM CAP ── -->
+        <rect x="12" y="368" width="56" height="12" rx="2" fill="url(#cap-grad)" stroke="rgba(255,255,255,.1)" stroke-width="0.5"/>
+
+        <!-- ── BOTTOM BALL ── -->
+        <circle cx="40" cy="390" r="11" fill="url(#ball-grad)" stroke="rgba(255,255,255,.15)" stroke-width="0.5"/>
+      </svg>
     </div>
   </div>
 </section>
@@ -629,16 +436,21 @@ footer{
         <p>Manny's isn't trying to be anything fancy. It's a barbershop — chairs, clippers, and guys who actually know what they're doing. People come in, get a good cut, and come back two weeks later. That's it.</p>
         <div class="apull">"I drive past two other shops to get here. The fade is always clean, the wait is never bad, and they don't make you feel like you're inconveniencing them."</div>
         <p>We do fades, tapers, scissor cuts, beard lineups, straight razor shaves, and <strong>kids cuts</strong>. The kids thing matters — half our regulars started coming here because someone trusted us with a nervous 4-year-old and it went well. We're patient. We're not in a rush.</p>
-        <p>Walk-ins are fine. Bring the whole family. Tell us what you want and we'll handle it. If you don't know what you want, we'll figure it out together. No judgment, no upselling, no attitude.</p>
+        <p>Walk-ins are fine. Bring the whole family. Tell us what you want and we'll handle it. No judgment, no upselling, no attitude.</p>
         <p>This is a <strong>neighborhood shop</strong>. One of the last real ones in this part of Long Island. You'll notice the difference when you sit down.</p>
       </div>
       <div class="aside">
-        <div class="pole-wrap pole-sm">
-          <div class="pole-ball"></div>
-          <div class="pole-cap"></div>
-          <div class="pole-body"></div>
-          <div class="pole-cap pole-cap-bot"></div>
-          <div class="pole-ball"></div>
+        <div class="scissors-deco">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(50,50)">
+              <!-- Left blade -->
+              <path d="M -20 -15 Q -25 0 -20 15 Q -10 18 0 15 L 0 -15 Q -10 -18 -20 -15" fill="none" stroke="#c49240" stroke-width="1.2" stroke-linecap="round"/>
+              <!-- Right blade -->
+              <path d="M 20 -15 Q 25 0 20 15 Q 10 18 0 15 L 0 -15 Q 10 -18 20 -15" fill="none" stroke="#c49240" stroke-width="1.2" stroke-linecap="round"/>
+              <!-- Center screw -->
+              <circle cx="0" cy="0" r="2" fill="#c49240"/>
+            </g>
+          </svg>
         </div>
         <div class="anums">
           <div class="anum"><span class="anum-n">4.7★</span><span class="anum-l">Avg. Google Rating</span></div>
@@ -662,36 +474,14 @@ footer{
       <div class="svc svc-feat">
         <span class="snum">01</span>
         <div class="sn">Skin Fades</div>
-        <p class="sd">Low, mid, high — whatever you want, we bring it down clean. Sharp line, smooth blend, no patchiness. This is what we're known for and we take it seriously. Come in with a reference photo or just describe it. Either works.</p>
+        <p class="sd">Low, mid, high — whatever you want, we bring it down clean. Sharp line, smooth blend, no patchiness. Come in with a reference photo or just describe it. Either works.</p>
         <span class="stag">Most Requested</span>
       </div>
-      <div class="svc">
-        <span class="snum">02</span>
-        <div class="sn">Classic Cuts</div>
-        <p class="sd">Crew cut, taper, ivy league. Scissor or clipper. Old technique, done right.</p>
-      </div>
-      <div class="svc">
-        <span class="snum">03</span>
-        <div class="sn">Beard Lineups</div>
-        <p class="sd">Tight edges, clean shape. Makes the whole cut land properly.</p>
-        <span class="stag">Add-on or standalone</span>
-      </div>
-      <div class="svc">
-        <span class="snum">04</span>
-        <div class="sn">Hot Towel Shave</div>
-        <p class="sd">Warm towel, real lather, straight razor. The kind of shave you can't do at home.</p>
-        <span class="stag">Premium</span>
-      </div>
-      <div class="svc">
-        <span class="snum">05</span>
-        <div class="sn">Kids Cuts</div>
-        <p class="sd">We're good with kids. Patient, calm, no rushing. Parents have told us it's the first place their kid didn't cry.</p>
-      </div>
-      <div class="svc">
-        <span class="snum">06</span>
-        <div class="sn">Razor Finish</div>
-        <p class="sd">Every cut finishes with a straight razor on the neck and edges. That last detail is what you see in the mirror.</p>
-      </div>
+      <div class="svc"><span class="snum">02</span><div class="sn">Classic Cuts</div><p class="sd">Crew cut, taper, ivy league. Scissor or clipper. Old technique, done right.</p></div>
+      <div class="svc"><span class="snum">03</span><div class="sn">Beard Lineups</div><p class="sd">Tight edges, clean shape. Makes the whole cut land properly.</p><span class="stag">Add-on or standalone</span></div>
+      <div class="svc"><span class="snum">04</span><div class="sn">Hot Towel Shave</div><p class="sd">Warm towel, real lather, straight razor. The kind of shave you can't do at home.</p><span class="stag">Premium</span></div>
+      <div class="svc"><span class="snum">05</span><div class="sn">Kids Cuts</div><p class="sd">We're good with kids. Patient, calm, no rushing. Parents have told us it's the first place their kid didn't cry.</p></div>
+      <div class="svc"><span class="snum">06</span><div class="sn">Razor Finish</div><p class="sd">Every cut finishes with a straight razor on the neck and edges. That last detail is what you see in the mirror.</p></div>
     </div>
   </div>
 </section>
@@ -707,51 +497,18 @@ footer{
       <div class="rbig">
         <div class="rnum">4.7</div>
         <div class="rmeta">
-          <div class="rstars">
-            <div class="rstar"></div><div class="rstar"></div>
-            <div class="rstar"></div><div class="rstar"></div><div class="rstar h"></div>
-          </div>
+          <div class="rstars"><div class="rstar"></div><div class="rstar"></div><div class="rstar"></div><div class="rstar"></div><div class="rstar h"></div></div>
           <div class="rct">100+ Google Reviews</div>
         </div>
       </div>
     </div>
     <div class="revs">
-      <div class="rev">
-        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
-        <div class="rqm">"</div>
-        <p class="rbody">Best fade on Long Island, I'll die on that hill. Went in not knowing what I wanted, showed him a photo, came out exactly right. Been going back every three weeks since.</p>
-        <div class="rfoot"><div class="rav">JR</div><div><div class="rname">J. Rivera</div><div class="rsub">Regular since 2022</div></div></div>
-      </div>
-      <div class="rev">
-        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
-        <div class="rqm">"</div>
-        <p class="rbody">Took my 4-year-old. He cried the first five minutes. The barber didn't flinch, just kept talking to him, kept him distracted. Kid walked out with a clean cut and actually proud of it. That's the whole thing right there.</p>
-        <div class="rfoot"><div class="rav">DM</div><div><div class="rname">Dad from Northport</div><div class="rsub">Kids cut</div></div></div>
-      </div>
-      <div class="rev">
-        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
-        <div class="rqm">"</div>
-        <p class="rbody">Walked in on a Tuesday around noon. Waited maybe 8 minutes, was in and out in under 30. Left sharp. I've been doing this every few weeks for two years and it's been consistent every single time.</p>
-        <div class="rfoot"><div class="rav">TC</div><div><div class="rname">T. Carrillo</div><div class="rsub">Walk-in regular</div></div></div>
-      </div>
-      <div class="rev">
-        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
-        <div class="rqm">"</div>
-        <p class="rbody">Got the hot towel shave. Hadn't had a real one in years. Completely forgot how different it feels from doing it yourself. Worth every penny. Booked again before I left.</p>
-        <div class="rfoot"><div class="rav">MP</div><div><div class="rname">M. Patel</div><div class="rsub">Hot towel shave</div></div></div>
-      </div>
-      <div class="rev">
-        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
-        <div class="rqm">"</div>
-        <p class="rbody">My husband, my two boys, and my father-in-law all go here. Four different heads of hair, four different styles, all handled by the same shop. Nobody's had a bad experience. That's saying something.</p>
-        <div class="rfoot"><div class="rav">KL</div><div><div class="rname">K. Lombardi</div><div class="rsub">Family regular</div></div></div>
-      </div>
-      <div class="rev">
-        <div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div>
-        <div class="rqm">"</div>
-        <p class="rbody">Tried six different spots on Long Island in the last two years. Finally stopped looking. The quality here just doesn't slip — doesn't matter what day you go. Standards don't change.</p>
-        <div class="rfoot"><div class="rav">AB</div><div><div class="rname">A. Brunetti</div><div class="rsub">LI native, 2 yrs</div></div></div>
-      </div>
+      <div class="rev"><div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div><div class="rqm">"</div><p class="rbody">Best fade on Long Island, I'll die on that hill. Went in not knowing what I wanted, showed him a photo, came out exactly right. Been going back every three weeks since.</p><div class="rfoot"><div class="rav">JR</div><div><div class="rname">J. Rivera</div><div class="rsub">Regular since 2022</div></div></div></div>
+      <div class="rev"><div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div><div class="rqm">"</div><p class="rbody">Took my 4-year-old. He cried the first five minutes. The barber didn't flinch, just kept talking to him. Kid walked out with a clean cut and actually proud of it. That's the whole thing right there.</p><div class="rfoot"><div class="rav">DM</div><div><div class="rname">Dad from Northport</div><div class="rsub">Kids cut</div></div></div></div>
+      <div class="rev"><div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div><div class="rqm">"</div><p class="rbody">Walked in on a Tuesday around noon. Waited maybe 8 minutes, in and out in under 30. Left sharp. Been doing this every few weeks for two years, consistent every single time.</p><div class="rfoot"><div class="rav">TC</div><div><div class="rname">T. Carrillo</div><div class="rsub">Walk-in regular</div></div></div></div>
+      <div class="rev"><div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div><div class="rqm">"</div><p class="rbody">Got the hot towel shave. Hadn't had a real one in years. Completely forgot how different it feels from doing it yourself. Worth every penny. Booked again before I left.</p><div class="rfoot"><div class="rav">MP</div><div><div class="rname">M. Patel</div><div class="rsub">Hot towel shave</div></div></div></div>
+      <div class="rev"><div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div><div class="rqm">"</div><p class="rbody">My husband, my two boys, and my father-in-law all go here. Four different styles, all handled by the same shop. Nobody's had a bad experience. That's saying something.</p><div class="rfoot"><div class="rav">KL</div><div><div class="rname">K. Lombardi</div><div class="rsub">Family regular</div></div></div></div>
+      <div class="rev"><div class="revstars"><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div><div class="revstar"></div></div><div class="rqm">"</div><p class="rbody">Tried six different spots on Long Island in the last two years. Finally stopped looking. The quality here just doesn't slip — doesn't matter what day you go. Standards don't change.</p><div class="rfoot"><div class="rav">AB</div><div><div class="rname">A. Brunetti</div><div class="rsub">LI native, 2 yrs</div></div></div></div>
     </div>
   </div>
 </section>
@@ -764,36 +521,27 @@ footer{
         <span class="lbl">Inside the Shop</span>
         <h2 class="st">What to expect<br><em>when you walk in.</em></h2>
         <div class="rule"></div>
-        <p>Nobody's going to pitch you a product. Nobody's going to make you feel rushed. You sit down, you say what you want, and you get it. The barbers here actually listen — not just nod and do whatever they feel like.</p>
-        <p>The shop is <strong>clean and straightforward</strong>. No gimmicks, no vibe-of-the-week. Same quality every time you come through the door, whether it's your first visit or your fiftieth.</p>
+        <p>Nobody's going to pitch you a product. Nobody's going to make you feel rushed. You sit down, you say what you want, and you get it.</p>
+        <p>The shop is <strong>clean and straightforward</strong>. No gimmicks, no vibe-of-the-week. Same quality every time you come through the door.</p>
         <div class="elist">
-          <div class="erow">
-            <div class="en">01</div>
-            <div><div class="et">Walk right in</div><p class="eb">No app, no booking system, no DMs. Show up. If there's a wait it's short. If there isn't, you're in the chair in two minutes.</p></div>
-          </div>
-          <div class="erow">
-            <div class="en">02</div>
-            <div><div class="et">Good with kids, seriously</div><p class="eb">Not "we tolerate kids." We're actually patient. The barbers here have done hundreds of first haircuts.</p></div>
-          </div>
-          <div class="erow">
-            <div class="en">03</div>
-            <div><div class="et">Straight razor on the neck</div><p class="eb">Every haircut. Clean edges, clean neckline — not an add-on, just how the cut gets finished.</p></div>
-          </div>
-          <div class="erow">
-            <div class="en">04</div>
-            <div><div class="et">Same quality every time</div><p class="eb">Doesn't matter which day, which barber. You walk out looking right. Every time.</p></div>
-          </div>
+          <div class="erow"><div class="en">01</div><div><div class="et">Walk right in</div><p class="eb">No app, no booking system, no DMs. Show up. If there's a wait it's short.</p></div></div>
+          <div class="erow"><div class="en">02</div><div><div class="et">Good with kids, seriously</div><p class="eb">Not "we tolerate kids." We're actually patient. Hundreds of first haircuts. They know what they're doing.</p></div></div>
+          <div class="erow"><div class="en">03</div><div><div class="et">Straight razor on the neck</div><p class="eb">Every haircut. Clean edges, clean neckline — not an add-on, just how the cut gets finished.</p></div></div>
+          <div class="erow"><div class="en">04</div><div><div class="et">Same quality every time</div><p class="eb">Doesn't matter which day, which barber. You walk out looking right. Every time.</p></div></div>
         </div>
       </div>
-      <div class="epole-scene">
-        <div class="epole-glow" aria-hidden="true"></div>
-        <div class="pole-wrap pole-lg">
-          <div class="pole-ball"></div>
-          <div class="pole-cap"></div>
-          <div class="pole-body"></div>
-          <div class="pole-cap pole-cap-bot"></div>
-          <div class="pole-ball"></div>
-        </div>
+      <div class="exp-visual">
+        <svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+          <!-- Clippers icon -->
+          <g transform="translate(60,80)">
+            <rect x="-35" y="-30" width="70" height="50" rx="4" fill="none" stroke="#c49240" stroke-width="1.2"/>
+            <rect x="-32" y="-25" width="12" height="8" rx="1" fill="#c49240" opacity=".4"/>
+            <rect x="20" y="-25" width="12" height="8" rx="1" fill="#c49240" opacity=".4"/>
+            <circle cx="-20" cy="5" r="6" fill="none" stroke="#c49240" stroke-width="1.2"/>
+            <circle cx="20" cy="5" r="6" fill="none" stroke="#c49240" stroke-width="1.2"/>
+            <path d="M -8 15 L 0 25 L 8 15" fill="none" stroke="#c49240" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
       </div>
     </div>
   </div>
@@ -835,14 +583,10 @@ footer{
         </div>
       </div>
       <div>
-        <iframe
-          class="mapframe"
+        <iframe class="mapframe"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3009.847!2d-73.352787!3d40.868621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e830e6f4b4f4b5%3A0x4b1b2c3d4e5f6a7b!2s518%20Larkfield%20Rd%2C%20East%20Northport%2C%20NY%2011731!5e0!3m2!1sen!2sus!4v1700000000001!5m2!1sen!2sus"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          title="Manny's Barbershop location"
-        ></iframe>
+          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Manny's Barbershop location"></iframe>
         <p class="mapcap">518 Larkfield Rd · East Northport, NY · hover to view in color</p>
       </div>
     </div>
@@ -857,7 +601,7 @@ footer{
         <span class="lbl">Ready?</span>
         <h2 class="st">Just show up.<br><em>Or call first.</em></h2>
         <div class="rule"></div>
-        <p>Walk-ins are the norm here. No waiting weeks for an appointment, no online booking system to navigate. Call ahead if you want, or just come in.</p>
+        <p>Walk-ins are the norm here. No waiting weeks for an appointment. Call ahead if you want, or just come in.</p>
         <a href="tel:6317579400" class="cphone">(631) 757-9400</a>
         <a href="tel:6317579400" class="btn btn-y">Call Now</a>
       </div>
@@ -865,14 +609,11 @@ footer{
       <div class="conright">
         <span class="lbl">No Appointment Needed</span>
         <p>Weekday mornings move fastest. Sundays get busy but the wait's never bad — these guys work at a good pace without making you feel like you're on a conveyor belt.</p>
-        <p>First time? Tell them what you want. Bring a photo if you've got one. If you're not sure, say that — they'll figure it out. Nobody's going to make you feel stupid for not knowing the terminology.</p>
+        <p>First time? Tell them what you want. Bring a photo if you've got one. Nobody's going to make you feel stupid for not knowing the terminology.</p>
         <div class="tags">
-          <span class="tag">Walk-ins Welcome</span>
-          <span class="tag">Kids OK</span>
-          <span class="tag">Skin Fades</span>
-          <span class="tag">Straight Razor</span>
-          <span class="tag">Hot Towel</span>
-          <span class="tag">Beard Lineups</span>
+          <span class="tag">Walk-ins Welcome</span><span class="tag">Kids OK</span>
+          <span class="tag">Skin Fades</span><span class="tag">Straight Razor</span>
+          <span class="tag">Hot Towel</span><span class="tag">Beard Lineups</span>
           <span class="tag">East Northport</span>
         </div>
       </div>
@@ -896,43 +637,48 @@ footer{
 </footer>
 
 <script>
-  // Nav stuck shadow
-  const nav = document.getElementById('nav');
-  addEventListener('scroll', () => nav.classList.toggle('stuck', scrollY > 50));
-
-  // Hamburger menu
-  const ham  = document.getElementById('ham');
-  const menu = document.getElementById('mmenu');
-  ham.addEventListener('click', () => {
-    ham.classList.toggle('open');
-    menu.classList.toggle('open');
-  });
-  function closeMenu(){
-    ham.classList.remove('open');
-    menu.classList.remove('open');
+function checkMobile(){
+  if(window.innerWidth < 700){
+    document.body.classList.add('is-mobile');
+  } else {
+    document.body.classList.remove('is-mobile');
   }
-  // close on outside tap
-  document.addEventListener('click', e => {
-    if(!nav.contains(e.target) && !menu.contains(e.target)) closeMenu();
-  });
+}
+checkMobile();
+window.addEventListener('resize', checkMobile);
 
-  // Scroll-triggered fade-in
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if(e.isIntersecting){
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-        io.unobserve(e.target);
-      }
-    });
-  },{threshold:0.08});
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('stuck', scrollY > 50));
 
-  document.querySelectorAll('.svc,.rev,.anum,.erow,.locrow').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(16px)';
-    el.style.transition = 'opacity .5s ease, transform .5s ease';
-    io.observe(el);
+const ham  = document.getElementById('ham');
+const mmenu = document.getElementById('mmenu');
+ham.addEventListener('click', () => {
+  ham.classList.toggle('open');
+  mmenu.classList.toggle('open');
+});
+function closeMM(){
+  ham.classList.remove('open');
+  mmenu.classList.remove('open');
+}
+document.addEventListener('click', e => {
+  if(!nav.contains(e.target) && !mmenu.contains(e.target)) closeMM();
+});
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.style.opacity='1';
+      e.target.style.transform='translateY(0)';
+      io.unobserve(e.target);
+    }
   });
+},{threshold:0.07});
+document.querySelectorAll('.svc,.rev,.anum,.erow,.locrow').forEach(el=>{
+  el.style.opacity='0';
+  el.style.transform='translateY(16px)';
+  el.style.transition='opacity .5s ease,transform .5s ease';
+  io.observe(el);
+});
 </script>
 </body>
 </html>
