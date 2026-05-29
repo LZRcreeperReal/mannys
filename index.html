@@ -273,30 +273,35 @@ body.is-mobile ::-webkit-scrollbar{width:0px}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 @media (min-width: 701px) {
   .hamburger { display: none !important; }
-  #hero { padding: 80px 0 60px; }
+  #hero {
+    padding: 80px 160px 60px 5vw;
+    position: relative;
+  }
   .hero-inner {
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 0;
-    padding-left: 5vw;
+    max-width: 560px;
+    padding-left: 0;
   }
   .hero-text {
     flex: 0 0 auto;
-    width: 50%;
-    max-width: 500px;
+    width: 100%;
     min-width: 0;
   }
   h1.hname { font-size: 5.5vw; }
   h1.hname .g { font-size: 6.8vw; }
   .pole-wrap-hero {
-    flex: 0 0 auto;
-    align-self: stretch;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
     display: flex;
     align-items: center;
   }
   .pole-wrap-hero svg {
     width: 130px;
-    height: 100vh;
+    height: 100%;
     max-height: 100vh;
   }
 }
