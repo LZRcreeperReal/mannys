@@ -21,19 +21,52 @@ body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;o
    Pure SVG: clipPath cylinder + animating stripe group
    Sizing is handled entirely by media queries below
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-.pole-wrap-hero {
-  flex-shrink: 0;
-  filter: drop-shadow(0 0 40px rgba(176,42,34,.3)) drop-shadow(0 0 80px rgba(26,95,138,.15));
-}
-.pole-wrap-hero svg {
-  display: block;
-}
-.pole-stripes {
-  animation: pole-scroll 2.4s linear infinite;
-}
-@keyframes pole-scroll {
-  from { transform: translateY(0); }
-  to   { transform: translateY(60px); }
+@media (min-width: 701px) {
+  .hamburger {
+    display: none !important;
+  }
+
+  #hero {
+    padding: 80px 180px 60px 5vw; /* reserve space for pole */
+    position: relative;
+  }
+
+  .hero-inner {
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .hero-text {
+    width: min(650px, calc(100vw - 320px));
+    flex-shrink: 0;
+  }
+
+  h1.hname {
+    font-size: clamp(3.5rem, 5vw, 6rem);
+    line-height: .88;
+  }
+
+  h1.hname .g {
+    font-size: clamp(4rem, 6vw, 7rem);
+  }
+
+  .pole-wrap-hero {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 130px;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .pole-wrap-hero svg {
+    width: 130px;
+    height: auto;
+    max-height: 80vh;
+  }
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
