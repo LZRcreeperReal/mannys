@@ -19,10 +19,10 @@ body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;o
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    BARBER POLE - HERO ONLY
    Pure SVG: clipPath cylinder + animating stripe group
+   Sizing is handled entirely by media queries below
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .pole-wrap-hero {
   flex-shrink: 0;
-  flex-basis: 80px;
   filter: drop-shadow(0 0 40px rgba(176,42,34,.3)) drop-shadow(0 0 80px rgba(26,95,138,.15));
 }
 .pole-wrap-hero svg {
@@ -80,12 +80,12 @@ nav.stuck{box-shadow:0 2px 28px rgba(0,0,0,.8)}
 .hbg{position:absolute;inset:0;background:radial-gradient(ellipse 65% 50% at 18% 65%,rgba(90,54,6,.62) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 78% 30%,rgba(25,15,3,.72) 0%,transparent 60%),var(--black);animation:hbreathe 14s ease-in-out infinite alternate}
 @keyframes hbreathe{0%{filter:brightness(1)}100%{filter:brightness(1.1)}}
 .hbg::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent,transparent 38px,rgba(196,146,64,.014) 38px,rgba(196,146,64,.014) 39px)}
-.hero-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:5vw;width:100%;max-width:1100px}
-.hero-text{flex:1;min-width:0;max-width:560px}
+.hero-inner{position:relative;z-index:2;display:flex;width:100%;max-width:1100px}
+.hero-text{min-width:0}
 .heye{font-size:.58rem;letter-spacing:.44em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;display:flex;align-items:center;gap:.7rem}
 .heye::before{content:'';width:24px;height:1px;background:var(--gold);flex-shrink:0}
-h1.hname{font-family:Georgia,serif;font-size:clamp(3rem,9vw,8.5rem);font-weight:900;line-height:.88;text-transform:uppercase;letter-spacing:-.022em;color:var(--cream)}
-h1.hname .g{color:var(--gold);display:block;font-size:clamp(3.4rem,11vw,10rem)}
+h1.hname{font-family:Georgia,serif;font-weight:900;line-height:.88;text-transform:uppercase;letter-spacing:-.022em;color:var(--cream)}
+h1.hname .g{color:var(--gold);display:block}
 .hline{margin-top:1.6rem;font-size:clamp(.82rem,1.8vw,.96rem);color:var(--tan);line-height:1.75;max-width:400px;padding-left:1rem;border-left:2px solid var(--golddim)}
 .hbtns{display:flex;gap:.75rem;margin-top:1.8rem;flex-wrap:wrap}
 .hscroll{margin-top:2rem;display:flex;align-items:center;gap:.7rem;opacity:.35}
@@ -238,22 +238,11 @@ footer{background:var(--black);border-top:1px solid rgba(196,146,64,.1);padding:
 .fnav a:hover{color:var(--gold)}
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   MOBILE OVERRIDES
+   MOBILE OVERRIDES (non-hero sections via JS class)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 body.is-mobile .nlinks{display:none}
 body.is-mobile .hamburger{display:flex}
-body.is-mobile #hero{padding:70px 1rem 44px}
-body.is-mobile .hero-inner{flex-direction:row;align-items:center;gap:16px;justify-content:space-between}
-body.is-mobile .hero-text{flex:1;min-width:0;max-width:calc(100vw - 80px)}
-body.is-mobile h1.hname{font-size:9.5vw}
-body.is-mobile h1.hname .g{font-size:11.5vw}
-body.is-mobile .hline{font-size:.74rem;max-width:100%;padding-left:.6rem}
-body.is-mobile .heye{font-size:.42rem;letter-spacing:.18em}
-body.is-mobile .hbtns{flex-direction:column;gap:.5rem}
-body.is-mobile .hbtns .btn{text-align:center;width:100%;font-size:.58rem;padding:.6rem .8rem;letter-spacing:.08em}
-body.is-mobile .hscroll{margin-top:1rem}
-body.is-mobile .pole-wrap-hero{flex-shrink:0;flex-basis:52px}
-body.is-mobile .pole-wrap-hero svg{width:52px;height:240px}body.is-mobile #about,
+body.is-mobile #about,
 body.is-mobile #services,
 body.is-mobile #reviews,
 body.is-mobile #experience,
@@ -277,6 +266,78 @@ body.is-mobile footer{flex-direction:column;text-align:center}
 body.is-mobile .fnav{justify-content:center}
 body.is-mobile .tick-inner span{font-size:.56rem;padding:0 1.1rem}
 body.is-mobile ::-webkit-scrollbar{width:0px}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HERO — DESKTOP (> 700px)
+   Pole is larger, pushed to the far right edge
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media (min-width: 701px) {
+  .hamburger { display: none !important; }
+  #hero { padding: 80px 0 60px; }
+  .hero-inner {
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+    padding-left: 5vw;
+  }
+  .hero-text {
+    flex: 0 0 auto;
+    width: 50%;
+    max-width: 500px;
+    min-width: 0;
+  }
+  h1.hname { font-size: 5.5vw; }
+  h1.hname .g { font-size: 6.8vw; }
+  .pole-wrap-hero {
+    flex: 0 0 auto;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+  }
+  .pole-wrap-hero svg {
+    width: 130px;
+    height: 100vh;
+    max-height: 100vh;
+  }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HERO — MOBILE (≤ 700px)
+   Text shrinks so it never touches the pole
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media (max-width: 700px) {
+  .hamburger { display: flex !important; }
+  .nlinks { display: none !important; }
+  #hero { padding: 70px 1rem 44px; }
+  .hero-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .hero-text {
+    flex: 1;
+    min-width: 0;
+    max-width: calc(100vw - 72px - 10px - 2rem);
+    overflow: hidden;
+  }
+  h1.hname { font-size: 6.5vw; line-height: .95; }
+  h1.hname .g { font-size: 8vw; line-height: .95; }
+  .heye { font-size: .38rem; letter-spacing: .1em; margin-bottom: .6rem; }
+  .heye::before { width: 12px; }
+  .hline { font-size: .65rem; padding-left: .5rem; margin-top: .8rem; max-width: 100%; }
+  .hbtns { flex-direction: column; gap: .4rem; margin-top: 1rem; }
+  .hbtns .btn { text-align: center; font-size: .54rem; padding: .5rem .6rem; letter-spacing: .06em; }
+  .hscroll { margin-top: .7rem; }
+  .pole-wrap-hero {
+    flex: 0 0 52px;
+    width: 52px;
+  }
+  .pole-wrap-hero svg {
+    width: 52px;
+    height: 240px;
+  }
+}
 </style>
 </head>
 <body>
@@ -325,7 +386,7 @@ body.is-mobile ::-webkit-scrollbar{width:0px}
       </div>
     </div>
     <div class="pole-wrap-hero">
-      <svg width="80" height="400" viewBox="0 0 80 400" xmlns="http://www.w3.org/2000/svg">
+      <svg width="80" height="400" viewBox="0 0 80 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
         <defs>
           <!-- Clip to the cylinder body only -->
           <clipPath id="barrel">
