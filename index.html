@@ -76,7 +76,7 @@ nav.stuck{box-shadow:0 2px 28px rgba(0,0,0,.8)}
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    HERO
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-#hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:80px 5vw 60px}
+#hero{position:relative;overflow:hidden;min-height:100svh;display:flex;align-items:center;padding:80px 5vw 60px}
 .hbg{position:absolute;inset:0;background:radial-gradient(ellipse 65% 50% at 18% 65%,rgba(90,54,6,.62) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 78% 30%,rgba(25,15,3,.72) 0%,transparent 60%),var(--black);animation:hbreathe 14s ease-in-out infinite alternate}
 @keyframes hbreathe{0%{filter:brightness(1)}100%{filter:brightness(1.1)}}
 .hbg::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent,transparent 38px,rgba(196,146,64,.014) 38px,rgba(196,146,64,.014) 39px)}
@@ -290,7 +290,7 @@ body.is-mobile ::-webkit-scrollbar{width:0px}
      It never moves left regardless of content or screen size.
      As viewport gets wider the pole stays glued to the right. */
   .pole-wrap-hero {
-    position: fixed;
+    position: absolute;
     right: 15vw;
     top: 0;
     bottom: 0;
